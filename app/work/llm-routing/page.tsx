@@ -13,6 +13,7 @@ export default function LlmRoutingPage() {
   return (
     <article>
       <CaseStudyHeader
+        slug="llm-routing"
         label="// case study · production"
         title="Routing three foundation models at 1.5s, without paying for it twice."
         tagline="A production multi-model LLM inference layer behind enterprise applications — owning latency, cost, and reliability under varying load."

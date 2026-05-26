@@ -15,6 +15,23 @@ export type Project = {
   demo?: string;
   featured?: boolean;
   hasCaseStudy?: boolean;
+  /** Square thumbnail (recommend 320×320). If absent, a placeholder is rendered. */
+  image?: string;
+  /** Wide hero banner for case study pages (recommend 1600×900). */
+  hero?: string;
+  /**
+   * Optional autoplaying video to use in place of the hero image on the
+   * case study page (autoplay + loop + muted + playsInline). When set, the
+   * `hero` image acts as the poster while the video loads.
+   */
+  heroVideo?: string;
+  /**
+   * How to fit the hero image/video inside the 16:9 container.
+   * - `cover` (default): fills the box, may crop the image.
+   * - `contain`: shows the whole image with letterboxing — use this for UI
+   *   screenshots that shouldn't be cropped.
+   */
+  heroFit?: "cover" | "contain";
 };
 
 export const projects: Project[] = [
@@ -33,6 +50,9 @@ export const projects: Project[] = [
     demo: "https://github.com/premxai/emotion-engine-web",
     featured: true,
     hasCaseStudy: true,
+    image: "/projects/emotion-engine.png",
+    hero: "/projects/emotion-engine-hero.png",
+    heroVideo: "/projects/emotion-engine-hero.mp4",
   },
   {
     slug: "llm-routing",
@@ -47,6 +67,8 @@ export const projects: Project[] = [
     outcome: "18% inference cost ↓ · 42% incidents ↓ · 35% MTTD ↑",
     featured: true,
     hasCaseStudy: true,
+    image: "/projects/llm-routing.png",
+    hero: "/projects/llm-routing-hero.png",
   },
   {
     slug: "packai",
@@ -60,8 +82,10 @@ export const projects: Project[] = [
     stack: ["TypeScript", "VS Code API", "Vitest", "Node 20"],
     outcome: "741+ tests · capability-scored agent selection",
     repo: "https://github.com/premxai/PackAI",
-    featured: true,
     hasCaseStudy: true,
+    image: "/projects/packai.png",
+    hero: "/projects/packai-hero.png",
+    heroFit: "contain",
   },
   {
     slug: "sushi",
@@ -75,6 +99,8 @@ export const projects: Project[] = [
     outcome: "95% faster analysis · A–F quality grading · 6+ formats",
     repo: "https://github.com/premxai/sushi-eda",
     demo: "https://sushi-ochre-nine.vercel.app",
+    featured: true,
+    image: "/projects/sushi.png",
   },
   {
     slug: "papermind",
@@ -87,12 +113,15 @@ export const projects: Project[] = [
     stack: ["FastAPI", "Streamlit", "FAISS", "PyPDF", "OpenAI"],
     outcome: "Literature, methods, results, critique, and gap synthesis agents",
     repo: "https://github.com/premxai/papermind",
+    hasCaseStudy: true,
+    image: "/projects/papermind.png",
+    hero: "/projects/papermind-hero.png",
   },
   {
     slug: "jobclaw",
     title: "JobClaw",
     tagline:
-      "Autonomous scraper aggregating 5,000+ company ATS feeds, broadcasting to Discord every 15 min.",
+      "Autonomous scraper aggregating 30,000+ company ATS feeds, broadcasting to Discord every hour.",
     year: "2026",
     period: "Feb 2026 – present",
     status: "shipped",
@@ -100,42 +129,10 @@ export const projects: Project[] = [
     stack: ["Python", "SQLite WAL", "Discord.py", "Task Scheduler"],
     outcome: "Atomic hash dedup · decoupled micro-scrapers",
     repo: "https://github.com/premxai/jobclaw",
-  },
-  {
-    slug: "data-whisperer",
-    title: "Data Whisperer",
-    tagline: "Local-first auto-EDA with 4 LangGraph agents — Detective, Statistician, Visualizer, Storyteller.",
-    year: "2026",
-    period: "Feb 2026",
-    status: "shipped",
-    category: "Tooling",
-    stack: ["FastAPI", "Polars", "DuckDB", "LangGraph", "Ollama", "ChromaDB"],
-    outcome: "Local-first by design — your data never leaves your machine",
-    repo: "https://github.com/premxai/data-whisperer",
-  },
-  {
-    slug: "sneakerdex",
-    title: "SneakerDex",
-    tagline: "Pokédex for sneakers — camera ID + portfolio valuation.",
-    year: "2026",
-    period: "Mar 2026",
-    status: "shipped",
-    category: "Mobile",
-    stack: ["React Native", "Expo SDK 55", "Supabase", "Claude Sonnet 4.6 vision"],
-    outcome: "AI vision identification across three rarity tiers",
-    repo: "https://github.com/premxai/sneakerDex",
-  },
-  {
-    slug: "transformer-from-scratch",
-    title: "Transformer from Scratch",
-    tagline: '"Attention Is All You Need" reimplemented in raw PyTorch — for the love of it.',
-    year: "2025",
-    period: "Apr 2025",
-    status: "shipped",
-    category: "Learning",
-    stack: ["PyTorch", "Python"],
-    outcome: "Multi-head attention, positional encodings, encoder + decoder",
-    repo: "https://github.com/premxai/transformer-from-scratch",
+    hasCaseStudy: true,
+    image: "/projects/jobclaw.png",
+    hero: "/projects/jobclaw-hero.png",
+    heroFit: "contain",
   },
 ];
 

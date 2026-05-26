@@ -13,6 +13,7 @@ export default function PackAIPage() {
   return (
     <article>
       <CaseStudyHeader
+        slug="packai"
         label="// case study · tooling"
         title="Three coding agents, one DAG, zero rate-limit cliffs."
         tagline="A VS Code extension that decomposes natural-language project requests into a typed DAG, scores each task against agent capabilities, and runs Claude, Copilot, and Codex in parallel."

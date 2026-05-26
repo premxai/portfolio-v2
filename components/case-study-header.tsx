@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ProjectThumb } from "@/components/project-thumb";
+import { projects } from "@/data/projects";
 
 export function CaseStudyHeader({
   label,
@@ -9,6 +11,7 @@ export function CaseStudyHeader({
   role,
   repo,
   demo,
+  slug,
 }: {
   label: string;
   title: string;
@@ -17,9 +20,13 @@ export function CaseStudyHeader({
   role: string;
   repo?: string;
   demo?: string;
+  /** Project slug — when provided, renders a hero placeholder/image above the meta. */
+  slug?: string;
 }) {
+  const project = slug ? projects.find((p) => p.slug === slug) : undefined;
+
   return (
-    <header className="container-page pt-16 pb-12 border-b border-[color:var(--color-border)]">
+    <header className="container-page pt-16 pb-12">
       <Link
         href="/work"
         className="inline-flex items-center gap-1.5 font-mono text-xs text-[color:var(--color-fg-muted)] hover:text-[color:var(--color-accent)] transition-colors mb-10"
@@ -33,6 +40,11 @@ export function CaseStudyHeader({
       <p className="mt-6 text-lg md:text-xl text-[color:var(--color-fg-muted)] max-w-3xl text-pretty">
         {tagline}
       </p>
+      {project && (
+        <div className="mt-10 group">
+          <ProjectThumb project={project} size="hero" />
+        </div>
+      )}
       <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
         <Meta term="Period" value={period} />
         <Meta term="Role" value={role} />

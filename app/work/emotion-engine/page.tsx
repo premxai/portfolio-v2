@@ -13,6 +13,7 @@ export default function EmotionEnginePage() {
   return (
     <article>
       <CaseStudyHeader
+        slug="emotion-engine"
         label="// case study · research"
         title="Can emotions emerge from prediction alone?"
         tagline="A 72-feature LSTM, trained only to predict future world events, independently rediscovers fear, grief, and suspicion as functional internal states — no hardcoded appraisal rules."

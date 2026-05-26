@@ -1,15 +1,37 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { site } from "@/data/site";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/cn";
 
 const links = [
-  { href: "/", label: "Index" },
+  { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
+  { href: "/writing", label: "Writing" },
   { href: "/about", label: "About" },
 ];
 
 export function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[color:var(--color-bg)]/70 border-b border-[color:var(--color-border)]">
+    <header
+      className={cn(
+        "sticky top-0 z-40 transition-[background-color,backdrop-filter,border-color] duration-200",
+        scrolled
+          ? "bg-[color:var(--color-bg)]/70 backdrop-blur-md border-b border-[color:var(--color-border)]"
+          : "bg-transparent border-b border-transparent",
+      )}
+    >
       <div className="container-page flex items-center justify-between h-14">
         <Link
           href="/"
@@ -35,6 +57,7 @@ export function Nav() {
           >
             Résumé
           </a>
+          <ThemeToggle />
         </nav>
       </div>
     </header>

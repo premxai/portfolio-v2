@@ -67,7 +67,7 @@ function Hero() {
           >
             Résumé
           </a>
-          <div className="flex items-center gap-2 ml-1">
+          <div className="flex flex-wrap items-center gap-2 md:ml-1">
             <a
               href={site.social.github}
               target="_blank"
@@ -253,7 +253,7 @@ function Contact() {
         <div className="flex flex-wrap gap-3 font-mono text-sm">
           <a
             href={`mailto:${site.email}`}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[color:var(--color-accent)] text-[color:var(--color-bg)] hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 max-w-full break-all bg-[color:var(--color-accent)] text-[color:var(--color-bg)] hover:opacity-90 transition-opacity"
           >
             {site.email}
           </a>

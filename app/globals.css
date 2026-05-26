@@ -127,10 +127,19 @@
    filter so the same asset reads as dark contours on a light field — no
    second image needed.
 --------------------------------------------------------------------------- */
+/*
+ * Mountain image positioning.
+ *
+ * The descent canvas draws its peak/start anchor at viewport x = 52%. To
+ * keep the visible mountain peak in the image aligned with that anchor on
+ * any viewport (including portrait phones where `cover` crops the sides),
+ * the background-position-x must match: 52%. This way the image's 52%
+ * point and the container's 52% point always coincide.
+ */
 .mountains-image {
   background-image: url("/mountains.png");
   background-size: cover;
-  background-position: center;
+  background-position: 52% center;
   background-repeat: no-repeat;
 }
 

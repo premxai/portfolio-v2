@@ -40,7 +40,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
           <div className="flex-1 min-w-0 flex flex-col gap-4 md:flex-row md:items-baseline md:justify-between">
             <div className="space-y-2 md:max-w-2xl min-w-0">
-              <div className="flex items-center gap-3 text-xs font-mono text-[color:var(--color-fg-subtle)]">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-[color:var(--color-fg-subtle)]">
                 <span>{project.year}</span>
                 <span aria-hidden>·</span>
                 <span>{project.category}</span>

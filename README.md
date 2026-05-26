@@ -1,4 +1,4 @@
-# premxai.com — v2
+# premxai.com v2
 
 Personal portfolio for Prem Babu Kanaparthi. Inference Engineer — low-latency LLM serving, multi-model routing, cost-efficient production AI.
 

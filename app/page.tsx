@@ -4,6 +4,8 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import { SiHuggingface, SiX } from "react-icons/si";
 import { Section } from "@/components/section";
 import { ProjectCard } from "@/components/project-card";
+import { KillerStat } from "@/components/killer-stat";
+import { PlayableDescent } from "@/components/playable-descent";
 import { site } from "@/data/site";
 import { featuredProjects } from "@/data/projects";
 import { experience } from "@/data/experience";
@@ -14,16 +16,51 @@ export default function HomePage() {
     <>
       <Hero />
       <FeaturedWork />
+      <KillerStat />
       <Experience />
+      <LocalMinimum />
       <Publications />
       <Contact />
     </>
   );
 }
 
+function LocalMinimum() {
+  return (
+    <section id="local-minimum" className="container-page py-20 md:py-28">
+      <div className="max-w-2xl">
+        <p className="section-label mb-6 text-[color:var(--color-accent)]">
+          ⚠ // a local minimum
+        </p>
+        <div className="space-y-5 text-lg text-[color:var(--color-fg-muted)] text-pretty leading-relaxed">
+          <p>
+            For a while I optimized for the safe gradient — the projects that
+            were comfortable, the metrics that were easy to move. They worked.
+            They just weren&apos;t the{" "}
+            <span className="text-[color:var(--color-fg)]">
+              global minimum
+            </span>
+            .
+          </p>
+          <p>
+            The way out was never a bigger step in the same valley. It was a
+            change of landscape: harder problems, real production constraints,
+            research I couldn&apos;t fake. Momentum, it turns out, is what
+            carries you out of a place that&apos;s only{" "}
+            <span className="text-[color:var(--color-fg)]">locally</span> good.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Hero() {
   return (
-    <section className="container-page pt-24 md:pt-32 pb-20 md:pb-28">
+    <section
+      id="hero"
+      className="container-page pt-24 md:pt-32 pb-20 md:pb-28"
+    >
       <div className="flex flex-col gap-6 max-w-4xl">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-[color:var(--color-fg-subtle)]">
           <span className="inline-flex items-center gap-2">
@@ -44,6 +81,14 @@ function Hero() {
         <p className="text-xl md:text-2xl text-[color:var(--color-fg)] text-pretty max-w-3xl leading-snug">
           AI/ML Engineer building reliable, scalable AI systems across LLMs,
           inference, agents, and applied ML.
+        </p>
+        <p className="text-base md:text-lg text-[color:var(--color-fg-muted)] text-pretty max-w-2xl leading-relaxed">
+          However you got here — a résumé, a DM, or a 2&nbsp;a.m. rabbit hole —
+          you&apos;ve landed on a live{" "}
+          <span className="text-[color:var(--color-fg)]">loss landscape</span>.
+          Scroll down, and watch the{" "}
+          <span className="text-[color:var(--color-accent)]">descent</span>{" "}
+          converge.
         </p>
         <p className="font-mono text-sm text-[color:var(--color-fg-subtle)] text-pretty max-w-3xl">
           <span className="text-[color:var(--color-accent)]">
@@ -67,6 +112,7 @@ function Hero() {
           >
             Résumé
           </a>
+          <PlayableDescent />
           <div className="flex flex-wrap items-center gap-2 md:ml-1">
             <a
               href={site.social.github}
@@ -126,6 +172,7 @@ function Hero() {
 function FeaturedWork() {
   return (
     <Section
+      id="work"
       label="// selected work"
       title="Selected systems I've built across inference, agents, and ML evaluation."
     >
@@ -148,7 +195,7 @@ function FeaturedWork() {
 
 function Experience() {
   return (
-    <Section label="// experience" title="Where I've shipped.">
+    <Section id="experience" label="// experience" title="Where I've shipped.">
       <ol className="flex flex-col">
         {experience.map((e) => (
           <li
@@ -244,11 +291,17 @@ function Publications() {
 
 function Contact() {
   return (
-    <Section label="// contact" title="Building something interesting?">
+    <Section
+      id="contact"
+      label="// contact · global minimum"
+      title="You've reached the bottom of the descent."
+    >
       <div className="max-w-2xl space-y-6">
         <p className="text-lg md:text-xl text-[color:var(--color-fg-muted)] text-pretty">
-          Open to AI and ML Engineer roles, research collaborations, and the
-          occasional weird side project. The fastest way to reach me is email.
+          If you scrolled this far, you&apos;re basically done running inference
+          on me. So — what are you trying to build? I&apos;m open to AI and ML
+          Engineer roles, research collaborations, and the occasional weird
+          side project. Fastest path to me is email.
         </p>
         <div className="flex flex-wrap gap-3 font-mono text-sm">
           <a

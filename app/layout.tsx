@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SkillsMarquee } from "@/components/skills-marquee";
 import { GradientDescentBackground } from "@/components/gradient-descent-background";
+import { DescentAnnotations } from "@/components/descent-annotations";
 import { HomeOnly } from "@/components/home-only";
 import { PageBackground } from "@/components/page-background";
 import { site } from "@/data/site";
@@ -64,6 +65,7 @@ export default function RootLayout({
           <PageBackground />
           <HomeOnly>
             <GradientDescentBackground />
+            <DescentAnnotations />
           </HomeOnly>
           <div className="relative z-10 flex flex-col flex-1">
             <Nav />

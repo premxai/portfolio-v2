@@ -11,9 +11,6 @@
   --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
-  --color-opt-sgd: var(--opt-sgd);
-  --color-opt-momentum: var(--opt-momentum);
-  --color-opt-adam: var(--opt-adam);
   --color-contour: var(--contour);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
@@ -38,11 +35,8 @@
   --accent: #fb923c;
   --accent-soft: #fb923c1a;
   --grain: rgba(255, 255, 255, 0.025);
-  /* Optimizer-race background: one color per optimizer, plus the faint
-     contour-line color for the loss-surface topography underneath them. */
-  --opt-sgd: #fb923c;
-  --opt-momentum: #a884ff;
-  --opt-adam: #22d3ee;
+  /* Faint contour-line color for the loss-surface topography behind the
+     home page descent. */
   --contour: rgba(255, 255, 255, 0.09);
   color-scheme: dark;
 }
@@ -59,9 +53,6 @@
   --accent: #ea580c;
   --accent-soft: #ea580c14;
   --grain: rgba(0, 0, 0, 0.04);
-  --opt-sgd: #ea580c;
-  --opt-momentum: #7c3aed;
-  --opt-adam: #0891b2;
   --contour: rgba(0, 0, 0, 0.1);
   color-scheme: light;
 }

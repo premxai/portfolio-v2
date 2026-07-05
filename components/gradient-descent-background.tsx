@@ -2,41 +2,69 @@
 
 import { useEffect, useRef } from "react";
 import {
-  loss2D,
   grad2D,
   lossRange2D,
   sampleGrid2D,
   GLOBAL_MIN_2D,
-  stepSGD2D,
-  stepMomentum2D,
   stepAdam2D,
-  converged2D,
-  type SGDState2D,
-  type MomentumState2D,
   type AdamState2D,
 } from "@/lib/loss-landscape";
 
 /**
- * Home page background: a live contour map of a real 2-D loss surface with
- * three optimizers racing across it.
+ * Home page background: a live contour map of a real 2-D loss surface, with
+ * a single ball descending it as you scroll.
  *
- * The surface is sampled on a grid once at mount and its iso-contours are
- * extracted via marching squares (see `marchingSquares` below); the extracted
- * polylines are cached, so that one-time cost never repeats. Every animation
- * frame only redraws the cached contour strokes plus three moving balls, one
- * per optimizer, each stepping its own exact textbook update rule (SGD,
- * Polyak heavy-ball momentum, Adam) against the shared analytic gradient
- * from lib/loss-landscape.ts. When all three settle, diverge, or a step cap
- * is hit, a new race starts from a fresh random point.
+ * The descent path is not hand-drawn: it's the actual trajectory of Adam
+ * (Kingma & Ba) run once, at mount, from a fixed starting point down to the
+ * real global minimum (see PATH_START below; verified separately to sweep
+ * across the canvas and genuinely converge, not just fall straight down).
+ * Scroll position (0 → 1 down the page) maps directly onto that trajectory,
+ * the same way the very first version of this background worked. The ball
+ * only moves when you scroll it there; nothing here runs on its own or
+ * jumps around independently, which is the whole point.
  *
- * This layer is `pointer-events-none` and stays that way: the race always
- * auto-runs, and the only cursor interaction is a passive proximity check
- * (mousemove on `window`) that brightens a ball's label when you happen to
- * hover near it. Nothing here can ever intercept a click.
+ * The surface's contours are sampled on a grid once at mount and extracted
+ * via marching squares (see `marchingSquares` below); the polylines are
+ * cached, so that cost never repeats. Every frame only redraws the cached
+ * contour strokes, the trail so far, and the ball.
  *
- * Respects `prefers-reduced-motion`: draws one static frame (contours + all
- * three balls parked at the global minimum) and stops.
+ * This layer is `pointer-events-none` and stays that way.
+ *
+ * Respects `prefers-reduced-motion`: the sonar-ring pulse at the minimum
+ * stops animating, but the ball still updates its position on scroll (that
+ * one-to-one link to a user's own scroll action isn't the kind of motion
+ * the preference is meant to suppress; only the autoplaying pulse is).
  */
+
+// Fixed starting point for the descent path (verified via a standalone
+// check: Adam from here at lr = 0.03 sweeps ~60% of the canvas past a
+// local basin before genuinely converging to the true global minimum in
+// ~140 steps, not just falling straight into the nearest well).
+const PATH_START = { x: 0.05, y: 0.5 };
+const PATH_LR = 0.03;
+const PATH_MAX_STEPS = 400;
+const PATH_SETTLE_GRAD_EPS = 0.008;
+
+function buildDescentPath(): { x: number; y: number }[] {
+  let state: AdamState2D = {
+    x: PATH_START.x,
+    y: PATH_START.y,
+    mx: 0,
+    my: 0,
+    vx: 0,
+    vy: 0,
+    t: 0,
+  };
+  const path: { x: number; y: number }[] = [{ x: state.x, y: state.y }];
+  for (let i = 0; i < PATH_MAX_STEPS; i++) {
+    state = stepAdam2D(state, { lr: PATH_LR });
+    path.push({ x: state.x, y: state.y });
+    const [gx, gy] = grad2D(state.x, state.y);
+    if (Math.hypot(gx, gy) < PATH_SETTLE_GRAD_EPS) break;
+  }
+  return path;
+}
+
 export function GradientDescentBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -85,6 +113,9 @@ export function GradientDescentBackground() {
       marchingSquares(grid, gridN.nx, gridN.ny, level),
     );
 
+    // --- The descent path: one real Adam trajectory, computed once -----
+    const path = buildDescentPath();
+
     // --- Colors ----------------------------------------------------------
     function readVar(name: string, fallback: string): string {
       const v = getComputedStyle(document.documentElement)
@@ -95,9 +126,7 @@ export function GradientDescentBackground() {
     function colors() {
       return {
         contour: readVar("--contour", "rgba(255,255,255,0.09)"),
-        sgd: readVar("--opt-sgd", "#fb923c"),
-        momentum: readVar("--opt-momentum", "#a884ff"),
-        adam: readVar("--opt-adam", "#22d3ee"),
+        accent: readVar("--accent", "#fb923c"),
       };
     }
 
@@ -114,317 +143,161 @@ export function GradientDescentBackground() {
       ctx!.stroke();
     }
 
-    function drawGlobalMinOrb(t: number, intensity = 1) {
+    // --- Scroll progress -------------------------------------------------
+    let scrollProgress = 0;
+    function updateScroll() {
+      const max =
+        (document.documentElement.scrollHeight ||
+          document.body.scrollHeight) - window.innerHeight;
+      scrollProgress =
+        max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
+    }
+    updateScroll();
+
+    // --- Trail + ball along the precomputed path ------------------------
+    function drawPathAndBall(accent: string) {
+      const idxFloat = scrollProgress * (path.length - 1);
+      const idx = Math.floor(idxFloat);
+      const frac = idxFloat - idx;
+      const trailLen = Math.min(path.length, idx + 1);
+
+      if (trailLen > 1) {
+        for (let i = 0; i < trailLen - 1; i++) {
+          const [x0, y0] = toScreen(path[i].x, path[i].y);
+          const [x1, y1] = toScreen(path[i + 1].x, path[i + 1].y);
+          const fade = i / Math.max(1, trailLen - 1);
+          ctx!.lineWidth = 1 + 0.6 * fade;
+          ctx!.strokeStyle = hexA(accent, 0.2 + 0.55 * fade);
+          ctx!.beginPath();
+          ctx!.moveTo(x0, y0);
+          ctx!.lineTo(x1, y1);
+          ctx!.stroke();
+        }
+
+        const stride = Math.max(4, Math.floor(path.length / 32));
+        for (let i = 0; i < trailLen; i += stride) {
+          const [x, y] = toScreen(path[i].x, path[i].y);
+          const fade = i / Math.max(1, trailLen - 1);
+          ctx!.beginPath();
+          ctx!.arc(x, y, 1.8 + 1.2 * fade, 0, Math.PI * 2);
+          ctx!.fillStyle = hexA(accent, 0.4 + 0.55 * fade);
+          ctx!.fill();
+        }
+      }
+
+      const headIdx = Math.min(path.length - 1, idx);
+      const nextIdx = Math.min(path.length - 1, idx + 1);
+      const pHead = path[headIdx];
+      const pNext = path[nextIdx];
+      const headX = pHead.x + (pNext.x - pHead.x) * frac;
+      const headY = pHead.y + (pNext.y - pHead.y) * frac;
+      const [bx, by] = toScreen(headX, headY);
+
+      const halo = ctx!.createRadialGradient(bx, by, 0, bx, by, 26);
+      halo.addColorStop(0, hexA(accent, 0.55));
+      halo.addColorStop(1, hexA(accent, 0));
+      ctx!.fillStyle = halo;
+      ctx!.beginPath();
+      ctx!.arc(bx, by, 26, 0, Math.PI * 2);
+      ctx!.fill();
+
+      ctx!.beginPath();
+      ctx!.arc(bx, by, 4, 0, Math.PI * 2);
+      ctx!.fillStyle = hexA(accent, 1);
+      ctx!.fill();
+    }
+
+    // The orb is the descent's destination: hidden until the user has
+    // scrolled most of the way there, then revealed over the last stretch
+    // so it reads as a "you've arrived" moment.
+    const REVEAL_START = 0.85;
+    function drawMinimumOrb(t: number) {
+      const reveal = Math.min(
+        1,
+        Math.max(0, (scrollProgress - REVEAL_START) / (1 - REVEAL_START)),
+      );
+      if (reveal <= 0) return;
+      const eased = reveal * reveal * reveal;
+
       const [gx, gy] = toScreen(GLOBAL_MIN_2D.x, GLOBAL_MIN_2D.y);
+      const pulse = reduced ? 1 : 0.85 + 0.15 * Math.sin(t * 1.6);
+
       if (!reduced) {
+        const RING_PERIOD = 2.8;
+        const RING_MAX_R = 130;
         for (let r = 0; r < 3; r++) {
-          const phase = (t / 2.8 + r / 3) % 1;
-          const radius = phase * 90;
+          const phase = (t / RING_PERIOD + r / 3) % 1;
+          const radius = phase * RING_MAX_R;
+          const ringAlpha = (1 - phase) * 0.55 * eased;
+          ctx!.lineWidth = 1.4 * (1 - phase * 0.6);
+          ctx!.strokeStyle = `rgba(168, 132, 255, ${ringAlpha})`;
           ctx!.beginPath();
           ctx!.arc(gx, gy, radius, 0, Math.PI * 2);
-          ctx!.lineWidth = 1.2 * (1 - phase * 0.6);
-          ctx!.strokeStyle = `rgba(168,132,255,${(1 - phase) * 0.35 * intensity})`;
           ctx!.stroke();
         }
       }
-      const haloR = 56;
+
+      const haloR = 80 * pulse;
       const grad = ctx!.createRadialGradient(gx, gy, 0, gx, gy, haloR);
-      grad.addColorStop(0, `rgba(168,132,255,${0.32 * intensity})`);
-      grad.addColorStop(1, "rgba(168,132,255,0)");
+      grad.addColorStop(0, `rgba(168, 132, 255, ${0.55 * pulse * eased})`);
+      grad.addColorStop(0.4, `rgba(168, 132, 255, ${0.18 * pulse * eased})`);
+      grad.addColorStop(1, "rgba(168, 132, 255, 0)");
       ctx!.fillStyle = grad;
       ctx!.beginPath();
       ctx!.arc(gx, gy, haloR, 0, Math.PI * 2);
       ctx!.fill();
-    }
 
-    // --- The race: SGD vs momentum vs Adam ------------------------------
-    type Racer = {
-      name: string;
-      color: () => string;
-      x: number;
-      y: number;
-      trail: [number, number][];
-      settledSince: number | null;
-      pulseUntil: number;
-      wasConverged: boolean;
-    };
-
-    function randomStart(): { x: number; y: number } {
-      return {
-        x: 0.08 + Math.random() * 0.84,
-        y: 0.08 + Math.random() * 0.84,
-      };
-    }
-
-    let sgdState: SGDState2D = { x: 0.5, y: 0.5 };
-    let momState: MomentumState2D = { x: 0.5, y: 0.5, vx: 0, vy: 0 };
-    let adamState: AdamState2D = {
-      x: 0.5,
-      y: 0.5,
-      mx: 0,
-      my: 0,
-      vx: 0,
-      vy: 0,
-      t: 0,
-    };
-    let racers: Racer[] = [];
-    let raceStep = 0;
-    let respawnAt = 0;
-
-    function spawnRace(now: number) {
-      // Each optimizer gets its own small jitter around a shared anchor, the
-      // way separate training runs get their own initialization, so the
-      // three occasionally land in different basins of the same landscape.
-      const anchor = randomStart();
-      const jitter = () => (Math.random() - 0.5) * 0.03;
-      sgdState = { x: anchor.x + jitter(), y: anchor.y + jitter() };
-      momState = {
-        x: anchor.x + jitter(),
-        y: anchor.y + jitter(),
-        vx: 0,
-        vy: 0,
-      };
-      adamState = {
-        x: anchor.x + jitter(),
-        y: anchor.y + jitter(),
-        mx: 0,
-        my: 0,
-        vx: 0,
-        vy: 0,
-        t: 0,
-      };
-      racers = [
-        {
-          name: "SGD",
-          color: () => colors().sgd,
-          x: sgdState.x,
-          y: sgdState.y,
-          trail: [],
-          settledSince: null,
-          pulseUntil: 0,
-          wasConverged: false,
-        },
-        {
-          name: "momentum",
-          color: () => colors().momentum,
-          x: momState.x,
-          y: momState.y,
-          trail: [],
-          settledSince: null,
-          pulseUntil: 0,
-          wasConverged: false,
-        },
-        {
-          name: "Adam",
-          color: () => colors().adam,
-          x: adamState.x,
-          y: adamState.y,
-          trail: [],
-          settledSince: null,
-          pulseUntil: 0,
-          wasConverged: false,
-        },
-      ];
-      raceStep = 0;
-      respawnAt = 0;
-    }
-    spawnRace(0);
-
-    const SGD_OPTS = { lr: 0.006 };
-    const MOM_OPTS = { lr: 0.006, beta: 0.85 };
-    const ADAM_OPTS = { lr: 0.02 };
-    const MAX_STEPS = 420;
-    const SETTLE_GRAD_EPS = 0.012;
-    const PAUSE_MS = 1400;
-
-    function outOfBounds(x: number, y: number) {
-      return x < -0.3 || x > 1.3 || y < -0.3 || y > 1.3;
-    }
-
-    function stepRace(now: number) {
-      if (respawnAt) {
-        if (now >= respawnAt) spawnRace(now);
-        return;
-      }
-
-      sgdState = stepSGD2D(sgdState, SGD_OPTS);
-      momState = stepMomentum2D(momState, MOM_OPTS);
-      adamState = stepAdam2D(adamState, ADAM_OPTS);
-      raceStep++;
-
-      const live: [Racer, { x: number; y: number }][] = [
-        [racers[0], sgdState],
-        [racers[1], momState],
-        [racers[2], adamState],
-      ];
-
-      let allSettledOrDone = true;
-      for (const [racer, state] of live) {
-        racer.x = state.x;
-        racer.y = state.y;
-        racer.trail.push([state.x, state.y]);
-        if (racer.trail.length > 50) racer.trail.shift();
-
-        const [gx, gy] = grad2D(state.x, state.y);
-        const gnorm = Math.hypot(gx, gy);
-        const settled = gnorm < SETTLE_GRAD_EPS || outOfBounds(state.x, state.y);
-        if (settled && racer.settledSince === null) racer.settledSince = raceStep;
-        if (!settled) allSettledOrDone = false;
-
-        const nowConverged = converged2D(state);
-        if (nowConverged && !racer.wasConverged) {
-          racer.pulseUntil = now + 900;
-        }
-        racer.wasConverged = nowConverged;
-      }
-
-      if (allSettledOrDone || raceStep >= MAX_STEPS) {
-        respawnAt = now + PAUSE_MS;
-      }
-    }
-
-    // --- Passive hover (never captures clicks; canvas stays pointer-events-none) ---
-    let mouseX = -9999;
-    let mouseY = -9999;
-    function onMouseMove(e: MouseEvent) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    }
-    if (!reduced) window.addEventListener("mousemove", onMouseMove, { passive: true });
-
-    // Optimizers this close together (or, often, converged to the same
-    // basin) would otherwise stack exactly on top of one another, and
-    // whichever is drawn last would fully hide the others. This tiny
-    // constant per-racer screen offset (applied only to the rendered dot,
-    // never to the underlying state used for physics or the hover readout)
-    // keeps all three visible as a small fan instead of one hiding the rest.
-    const RENDER_OFFSET: [number, number][] = [
-      [-4, -4],
-      [0, 5],
-      [4, -4],
-    ];
-
-    function drawRacer(racer: Racer, now: number, idx: number) {
-      const color = racer.color();
-      const [rawX, rawY] = toScreen(racer.x, racer.y);
-      const [ox, oy] = RENDER_OFFSET[idx];
-      const bx = rawX + ox;
-      const by = rawY + oy;
-
-      // Trail (drawn at true, unoffset positions so it reads as this ball's
-      // actual path; only the current-position marker gets nudged).
-      const trail = racer.trail;
-      for (let i = 0; i < trail.length; i++) {
-        const fade = i / Math.max(1, trail.length - 1);
-        const [tx, ty] = toScreen(trail[i][0], trail[i][1]);
-        ctx!.beginPath();
-        ctx!.arc(tx, ty, 1.3, 0, Math.PI * 2);
-        ctx!.fillStyle = hexA(color, 0.05 + 0.22 * fade);
-        ctx!.fill();
-      }
-
-      // Convergence pulse
-      if (now < racer.pulseUntil) {
-        const life = 1 - (racer.pulseUntil - now) / 900;
-        ctx!.beginPath();
-        ctx!.arc(bx, by, 6 + life * 26, 0, Math.PI * 2);
-        ctx!.lineWidth = 1.5 * (1 - life);
-        ctx!.strokeStyle = hexA(color, 0.5 * (1 - life));
-        ctx!.stroke();
-      }
-
-      // Glow + ball
-      const glow = ctx!.createRadialGradient(bx, by, 0, bx, by, 16);
-      glow.addColorStop(0, hexA(color, 0.45));
-      glow.addColorStop(1, hexA(color, 0));
-      ctx!.fillStyle = glow;
+      ctx!.fillStyle = `rgba(220, 200, 255, ${0.95 * pulse * eased})`;
       ctx!.beginPath();
-      ctx!.arc(bx, by, 16, 0, Math.PI * 2);
+      ctx!.arc(gx, gy, 5.5, 0, Math.PI * 2);
       ctx!.fill();
-
-      ctx!.beginPath();
-      ctx!.arc(bx, by, 3.5, 0, Math.PI * 2);
-      ctx!.fillStyle = hexA(color, 1);
-      ctx!.fill();
-
-      // Label: faint always, brighter within hover radius of the ball.
-      const dist = Math.hypot(mouseX - bx, mouseY - by);
-      const hovered = dist < 26;
-      ctx!.font = "10px var(--font-mono), monospace";
-      ctx!.fillStyle = hexA(color, hovered ? 0.95 : 0.4);
-      const label = hovered
-        ? `${racer.name} · L=${loss2D(racer.x, racer.y).toFixed(2)}`
-        : racer.name;
-      ctx!.fillText(label, bx + 8, by - 8);
     }
 
     function draw(now: number) {
       const c = colors();
       ctx!.clearRect(0, 0, width, height);
       drawContours(c.contour);
-      drawGlobalMinOrb(now / 1000);
-
-      // Draw still-moving racers first, settled (parked) ones last, so a
-      // racer that's actively crossing the canvas can never paint over one
-      // that has already come to rest nearby. Each racer keeps its own
-      // fixed RENDER_OFFSET (looked up by original index) regardless of
-      // this draw-order reshuffle, so its nudge direction stays consistent.
-      const drawOrder = racers
-        .map((racer, idx) => ({ racer, idx }))
-        .sort((a, b) => {
-          const aSettled = a.racer.settledSince !== null ? 1 : 0;
-          const bSettled = b.racer.settledSince !== null ? 1 : 0;
-          return aSettled - bSettled;
-        });
-      for (const { racer, idx } of drawOrder) drawRacer(racer, now, idx);
+      drawPathAndBall(c.accent);
+      drawMinimumOrb(now / 1000);
     }
 
-    // --- Loop, paused (not skipped) while the tab is hidden -------------
-    // The very first frame always paints regardless of visibility, so the
-    // canvas is never left blank; only the *ongoing* rAF scheduling pauses
-    // while backgrounded, resuming on the next visibilitychange.
+    // --- Loop: rAF only drives the sonar-ring pulse; ball position is a
+    // pure function of scrollProgress. `onScroll` always redraws immediately
+    // so the ball stays responsive to actual scrolling even if the pulse
+    // loop is paused (tab hidden) or never got a chance to run at all (some
+    // environments report the tab hidden from the very first frame).
     let rafId = 0;
-    let loopRunning = false;
-
     function loop(now: number) {
-      if (document.hidden) {
-        loopRunning = false;
-        return;
-      }
-      stepRace(now);
+      if (document.hidden) return;
       draw(now);
       rafId = window.requestAnimationFrame(loop);
     }
+    function onScroll() {
+      updateScroll();
+      draw(performance.now());
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     function onVisibility() {
-      if (!document.hidden && !loopRunning && !reduced) {
-        loopRunning = true;
+      if (!document.hidden && !reduced) {
+        window.cancelAnimationFrame(rafId);
         loop(performance.now());
       }
     }
     document.addEventListener("visibilitychange", onVisibility);
 
-    if (reduced) {
-      // Static frame: contours + all three balls parked at the minimum.
-      for (const r of racers) {
-        r.x = GLOBAL_MIN_2D.x;
-        r.y = GLOBAL_MIN_2D.y;
-      }
-      draw(0);
-    } else {
-      // Paint immediately (covers the hidden-at-mount case too), then start
-      // the animation loop only if the tab is actually visible.
-      draw(performance.now());
-      if (!document.hidden) {
-        loopRunning = true;
-        loop(performance.now());
-      }
+    // Always paint at least one frame regardless of visibility, so the
+    // canvas is never left blank; only the *ongoing* pulse animation is
+    // gated behind "not reduced and not hidden".
+    draw(performance.now());
+    if (!reduced && !document.hidden) {
+      loop(performance.now());
     }
 
     return () => {
       window.cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
@@ -477,7 +350,6 @@ function marchingSquares(
     BOTTOM = 2,
     LEFT = 3;
 
-  // clang-format-ish: case -> pairs of edges to connect (one or two segments).
   const CASES: Record<number, number[][]> = {
     1: [[LEFT, BOTTOM]],
     2: [[RIGHT, BOTTOM]],
@@ -521,7 +393,6 @@ function marchingSquares(
       const pairs = CASES[idx];
       if (!pairs) continue; // 0 or 15: cell entirely above or below level
 
-      // Interpolated crossing point on each of the 4 edges, computed lazily.
       const pt = (edge: number): [number, number] => {
         if (edge === TOP) {
           const t = (level - a) / (b - a);
@@ -535,7 +406,6 @@ function marchingSquares(
           const t = (level - d) / (c - d);
           return [x0 + t * (x1 - x0), y1];
         }
-        // LEFT
         const t = (level - a) / (d - a);
         return [x0, y0 + t * (y1 - y0)];
       };

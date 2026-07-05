@@ -16,7 +16,7 @@ export default function LlmRoutingPage() {
         slug="llm-routing"
         label="// case study · production"
         title="Routing three foundation models at 1.5s, without paying for it twice."
-        tagline="A production multi-model LLM inference layer behind enterprise applications — owning latency, cost, and reliability under varying load."
+        tagline="A production multi-model LLM inference layer behind enterprise applications, owning latency, cost, and reliability under varying load."
         period="Feb 2024 – Jul 2024"
         role="Generative AI Engineer at Concentrix + Webhelp"
       />
@@ -26,7 +26,7 @@ export default function LlmRoutingPage() {
           Enterprise teams wanted access to multiple foundation models from
           one stable endpoint. Each model had a different cost curve, a
           different latency profile, and a different failure mode. The naive
-          fix — pick one model and stick with it — left money on the table
+          fix (pick one model and stick with it) left money on the table
           and made every outage a full outage. The better fix was to put a
           routing layer in front of all of them and treat model choice as a
           tunable knob.
@@ -36,7 +36,7 @@ export default function LlmRoutingPage() {
         <ul>
           <li>
             <strong>Latency budget.</strong> End-to-end response had to feel
-            interactive across consumer-facing flows — sub-2s, ideally
+            interactive across consumer-facing flows: sub-2s, ideally
             sub-1.5s.
           </li>
           <li>
@@ -132,12 +132,12 @@ export default function LlmRoutingPage() {
         <ul>
           <li>
             Move classification logic from heuristic to a small fine-tuned
-            classifier earlier — the heuristic was good enough to ship but
+            classifier earlier. The heuristic was good enough to ship but
             ate engineering time as the model menu grew.
           </li>
           <li>
             Pre-compute a per-tenant routing policy rather than a single
-            global one — variance between enterprise customers&apos; mix of
+            global one. Variance between enterprise customers&apos; mix of
             requests turned out to be larger than I expected.
           </li>
         </ul>

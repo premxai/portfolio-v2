@@ -27,7 +27,7 @@ export default function PackAIPage() {
           Any single AI coding agent is bottlenecked by two things:
           rate-limits and capability mismatch. Ask the wrong model for the
           wrong task and you burn quota for a worse answer. <strong>PackAI</strong>{" "}
-          treats the three big assistants — Claude, Copilot, and Codex — as
+          treats the three big assistants (Claude, Copilot, and Codex) as
           interchangeable workers behind a planner, and routes each unit of
           work to whichever one looks best for it.
         </p>
@@ -107,8 +107,8 @@ export default function PackAIPage() {
         <ul>
           <li>
             <strong>State machine over framework.</strong> No LangGraph, no
-            external agent library — the orchestrator is a plain TypeScript
-            state machine. Easier to reason about, easier to test, and the
+            external agent library. The orchestrator is a plain TypeScript
+            state machine, easier to reason about, easier to test, and the
             741+ tests reflect that.
           </li>
           <li>
@@ -127,7 +127,7 @@ export default function PackAIPage() {
         <p>
           The capability-scoring layer mattered less than the conflict
           resolution layer. The agents were &ldquo;good enough&rdquo; that
-          most routing decisions barely moved quality — but two agents
+          most routing decisions barely moved quality, but two agents
           editing the same file concurrently broke things constantly until
           the staging-and-merge layer was in place. The reliability win was
           in coordination, not selection.

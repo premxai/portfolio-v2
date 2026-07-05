@@ -3,8 +3,8 @@ import { ArrowUpRight } from "lucide-react";
 
 /**
  * Full-bleed "scroll-stopper" moment. Pulls the single most arresting line
- * from the Emotion Engine case study — a statistically absurd p-value for an
- * emergent-emotions result — onto the home page as one oversized statement.
+ * from the Emotion Engine case study (a statistically absurd p-value for an
+ * emergent-emotions result) onto the home page as one oversized statement.
  *
  * The whole block is a link into /work/emotion-engine. Set apart from the
  * neighbouring sections with a slightly elevated band + hairline borders.

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 /**
  * Fixed left-rail "altitude" annotation (desktop only) that makes the site's
  * gradient-descent metaphor explicit without impeding reading. As you scroll,
- * it names where you are on the descent — high loss at the top, descending
+ * it names where you are on the descent: high loss at the top, descending
  * through the work, a flagged local minimum, and the global minimum at
  * Contact. A scrollspy driven by an IntersectionObserver over section ids.
  *
@@ -28,7 +28,7 @@ const STOPS: Stop[] = [
   {
     id: "local-minimum",
     state: "local minimum",
-    note: "good — but not global",
+    note: "good, but not global",
     mark: "⚠",
   },
   {
@@ -81,7 +81,7 @@ export function DescentAnnotations() {
       aria-hidden
       className="hidden lg:flex fixed left-3 2xl:left-6 top-1/2 -translate-y-1/2 z-30 pointer-events-none items-center gap-3"
     >
-      {/* Vertical progress ticks — hug the left edge, never overlap content. */}
+      {/* Vertical progress ticks. Hug the left edge, never overlap content. */}
       <div className="flex flex-col items-center gap-1.5">
         {STOPS.map((s, i) => (
           <span

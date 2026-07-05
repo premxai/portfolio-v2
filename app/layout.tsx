@@ -16,12 +16,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${site.domain}`),
   title: {
-    default: `${site.shortName} — ${site.role}`,
-    template: `%s — ${site.shortName}`,
+    default: `${site.shortName} · ${site.role}`,
+    template: `%s · ${site.shortName}`,
   },
   description: site.tagline,
   openGraph: {
-    title: `${site.shortName} — ${site.role}`,
+    title: `${site.shortName} · ${site.role}`,
     description: site.tagline,
     url: `https://${site.domain}`,
     siteName: site.shortName,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.shortName} — ${site.role}`,
+    title: `${site.shortName} · ${site.role}`,
     description: site.tagline,
     creator: "@premxai",
   },

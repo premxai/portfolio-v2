@@ -20,7 +20,7 @@ export function CaseStudyHeader({
   role: string;
   repo?: string;
   demo?: string;
-  /** Project slug — when provided, renders a hero placeholder/image above the meta. */
+  /** Project slug. When provided, renders a hero placeholder/image above the meta. */
   slug?: string;
 }) {
   const project = slug ? projects.find((p) => p.slug === slug) : undefined;

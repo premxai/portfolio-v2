@@ -20,7 +20,7 @@ export const experience: Experience[] = [
     bullets: [
       "Designed a routing system across 3+ foundation models with 1.5s end-to-end latency and 18% inference cost reduction.",
       "Integrated LiteLLM with AWS Bedrock and SageMaker, handling thousands of daily requests at 95%+ response accuracy.",
-      "Shipped CloudWatch-based observability with logging, safety checks, and drift monitoring — cut prod incidents 42% and improved MTTD 35%.",
+      "Shipped CloudWatch-based observability with logging, safety checks, and drift monitoring, cutting prod incidents 42% and improving MTTD 35%.",
     ],
   },
   {

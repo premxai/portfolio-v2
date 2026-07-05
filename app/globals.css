@@ -11,6 +11,10 @@
   --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-opt-sgd: var(--opt-sgd);
+  --color-opt-momentum: var(--opt-momentum);
+  --color-opt-adam: var(--opt-adam);
+  --color-contour: var(--contour);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -34,6 +38,12 @@
   --accent: #fb923c;
   --accent-soft: #fb923c1a;
   --grain: rgba(255, 255, 255, 0.025);
+  /* Optimizer-race background: one color per optimizer, plus the faint
+     contour-line color for the loss-surface topography underneath them. */
+  --opt-sgd: #fb923c;
+  --opt-momentum: #a884ff;
+  --opt-adam: #22d3ee;
+  --contour: rgba(255, 255, 255, 0.09);
   color-scheme: dark;
 }
 
@@ -49,6 +59,10 @@
   --accent: #ea580c;
   --accent-soft: #ea580c14;
   --grain: rgba(0, 0, 0, 0.04);
+  --opt-sgd: #ea580c;
+  --opt-momentum: #7c3aed;
+  --opt-adam: #0891b2;
+  --contour: rgba(0, 0, 0, 0.1);
   color-scheme: light;
 }
 
@@ -63,8 +77,8 @@
   }
 
   /*
-   * Inner-page background. Toggled by <PageBackground /> in the layout —
-   * sets data-page="section" on the body for /work, /writing, /about
+   * Inner-page background. Toggled by <PageBackground /> in the layout,
+   * which sets data-page="section" on the body for /work, /writing, /about
    * (and their nested routes) so they read as a softer designed-dark
    * instead of pitch black. Home keeps `--bg` underneath the mountains
    * overlay.
@@ -122,20 +136,11 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Mountains background image.
-   Defaults to the dark source image. In light mode we flip it via CSS
-   filter so the same asset reads as dark contours on a light field — no
-   second image needed.
+   Mountains background image. No longer used by the home background, which
+   now renders a live contour map of a real loss surface instead (see
+   components/gradient-descent-background.tsx). Left in place in case a
+   future page wants the same photo treatment; the asset stays in public/.
 --------------------------------------------------------------------------- */
-/*
- * Mountain image positioning.
- *
- * The descent canvas draws its peak/start anchor at viewport x = 52%. To
- * keep the visible mountain peak in the image aligned with that anchor on
- * any viewport (including portrait phones where `cover` crops the sides),
- * the background-position-x must match: 52%. This way the image's 52%
- * point and the container's 52% point always coincide.
- */
 .mountains-image {
   background-image: url("/mountains.png");
   background-size: cover;
@@ -148,7 +153,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Skills marquee — left-to-right infinite scroll.
+   Skills marquee: left-to-right infinite scroll.
    The track contains the list twice; animating translateX from -50% to 0
    moves content rightward and loops seamlessly because the duplicate
    ends up exactly where the original started.
@@ -179,7 +184,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Theme toggle — View Transitions circular wipe.
+   Theme toggle: View Transitions circular wipe.
    When supported, the new theme reveals from a growing circle centered on
    the toggle button. The radius and origin are set on the html element as
    CSS variables when the click fires.

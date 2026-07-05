@@ -16,7 +16,7 @@ export default function EmotionEnginePage() {
         slug="emotion-engine"
         label="// case study · research"
         title="Can emotions emerge from prediction alone?"
-        tagline="A 72-feature LSTM, trained only to predict future world events, independently rediscovers fear, grief, and suspicion as functional internal states — no hardcoded appraisal rules."
+        tagline="A 72-feature LSTM, trained only to predict future world events, independently rediscovers fear, grief, and suspicion as functional internal states, with no hardcoded appraisal rules."
         period="Feb 2026 – Apr 2026"
         role="Sole researcher"
         repo="https://github.com/premxai/emotion_engine"
@@ -27,7 +27,7 @@ export default function EmotionEnginePage() {
         <p>
           Most generative-agent systems script emotions: <em>if low health,
           set state = fear</em>. That works, but it doesn&apos;t answer the
-          more interesting question — does the agent actually <em>need</em>
+          more interesting question: does the agent actually <em>need</em>
           the rule? <strong>Emotion Engine</strong> extends Stanford&apos;s
           Generative Agents framework with a predictive world model and asks
           whether emotion-like internal states fall out for free when the only
@@ -44,23 +44,23 @@ export default function EmotionEnginePage() {
         </p>
         <ul>
           <li>
-            <strong>Baseline</strong> — no emotion machinery at all.
+            <strong>Baseline:</strong> no emotion machinery at all.
           </li>
           <li>
-            <strong>A — Hand-coded appraisal.</strong> The classic
+            <strong>A: Hand-coded appraisal.</strong> The classic
             OCC-rule-style system: scripted triggers for fear, grief,
             suspicion.
           </li>
           <li>
-            <strong>B — Behavioral cloning.</strong> A network that imitates
+            <strong>B: Behavioral cloning.</strong> A network that imitates
             an emotion-rule policy from logs.
           </li>
           <li>
-            <strong>C — Latent emotion dynamics.</strong> A learned emotion
+            <strong>C: Latent emotion dynamics.</strong> A learned emotion
             vector with no semantic supervision.
           </li>
           <li>
-            <strong>D — Predictive world model.</strong> A 72-feature LSTM
+            <strong>D: Predictive world model.</strong> A 72-feature LSTM
             that ingests the 21-dim observation and is trained only to
             predict 12 future world events. No emotion supervision. None.
           </li>
@@ -76,15 +76,15 @@ export default function EmotionEnginePage() {
         <ul>
           <li>
             A dimension that spikes when ghosts are nearby and drives
-            shelter-seeking — <strong>fear</strong>, in everything but name.
+            shelter-seeking: <strong>fear</strong>, in everything but name.
           </li>
           <li>
             A dimension that activates after a known agent dies and
-            depresses exploration for a window of steps — <strong>grief</strong>.
+            depresses exploration for a window of steps: <strong>grief</strong>.
           </li>
           <li>
             A dimension that scales with betrayal frequency and refuses
-            cooperation — <strong>suspicion</strong>.
+            cooperation: <strong>suspicion</strong>.
           </li>
         </ul>
         <p>
@@ -163,7 +163,7 @@ export default function EmotionEnginePage() {
             whether the same latent organization survives.
           </li>
           <li>
-            Run an ablation on memory horizon — at what point does
+            Run an ablation on memory horizon: at what point does
             &ldquo;suspicion&rdquo; stop generalizing?
           </li>
         </ul>

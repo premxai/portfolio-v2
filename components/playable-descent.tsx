@@ -25,7 +25,7 @@ import {
  * and momentum, and watch gradient descent converge to the global minimum,
  * oscillate, diverge, or get stuck in a local minimum.
  *
- * The ambient page background is untouched — this is a deliberate, opt-in
+ * The ambient page background is untouched. This is a deliberate, opt-in
  * sandbox so default browsing stays clean. Esc or the scrim closes it.
  */
 
@@ -33,7 +33,7 @@ const VERDICT_LABEL: Record<Verdict, string> = {
   descending: "descending…",
   converged: "converged · global minimum",
   "local-minimum": "stuck in a local minimum",
-  diverging: "diverging — lr too high",
+  diverging: "diverging, lr too high",
 };
 
 export function PlayableDescent() {
@@ -67,7 +67,7 @@ function DescentLab({ onClose }: { onClose: () => void }) {
   lrRef.current = lr;
   momRef.current = momentum;
 
-  // Simulation state lives in refs — the loop mutates these every frame
+  // Simulation state lives in refs. The loop mutates these every frame
   // without triggering React re-renders.
   const stateRef = useRef<DescentState>({ x: 0.04, v: 0 });
   const runningRef = useRef(true);
@@ -386,7 +386,7 @@ function DescentLab({ onClose }: { onClose: () => void }) {
             <span className="text-[color:var(--color-fg-subtle)]">
               loss{" "}
               <span ref={lossOut} className="text-[color:var(--color-fg)]">
-                —
+                0.000
               </span>
             </span>
             <span className="text-[color:var(--color-fg-subtle)]">
@@ -398,7 +398,7 @@ function DescentLab({ onClose }: { onClose: () => void }) {
             <span className="text-[color:var(--color-fg-subtle)]">
               |∇|{" "}
               <span ref={gradOut} className="text-[color:var(--color-fg)]">
-                —
+                0.000
               </span>
             </span>
             <span

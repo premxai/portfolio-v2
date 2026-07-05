@@ -34,7 +34,7 @@ function LocalMinimum() {
         </p>
         <div className="space-y-5 text-lg text-[color:var(--color-fg-muted)] text-pretty leading-relaxed">
           <p>
-            For a while I optimized for the safe gradient — the projects that
+            For a while I optimized for the safe gradient: the projects that
             were comfortable, the metrics that were easy to move. They worked.
             They just weren&apos;t the{" "}
             <span className="text-[color:var(--color-fg)]">
@@ -83,8 +83,8 @@ function Hero() {
           inference, agents, and applied ML.
         </p>
         <p className="text-base md:text-lg text-[color:var(--color-fg-muted)] text-pretty max-w-2xl leading-relaxed">
-          However you got here — a résumé, a DM, or a 2&nbsp;a.m. rabbit hole —
-          you&apos;ve landed on a live{" "}
+          You got here somehow: a résumé, a DM, a 2&nbsp;a.m. rabbit hole.
+          Either way, you&apos;ve landed on a live{" "}
           <span className="text-[color:var(--color-fg)]">loss landscape</span>.
           Scroll down, and watch the{" "}
           <span className="text-[color:var(--color-accent)]">descent</span>{" "}
@@ -204,7 +204,7 @@ function Experience() {
           >
             <div className="font-mono text-xs text-[color:var(--color-fg-subtle)] md:pt-1">
               <p>
-                {e.start} — {e.end}
+                {e.start} – {e.end}
               </p>
               <p className="text-[color:var(--color-fg-muted)] mt-1">
                 {e.location}
@@ -299,7 +299,7 @@ function Contact() {
       <div className="max-w-2xl space-y-6">
         <p className="text-lg md:text-xl text-[color:var(--color-fg-muted)] text-pretty">
           If you scrolled this far, you&apos;re basically done running inference
-          on me. So — what are you trying to build? I&apos;m open to AI and ML
+          on me. So, what are you trying to build? I&apos;m open to AI and ML
           Engineer roles, research collaborations, and the occasional weird
           side project. Fastest path to me is email.
         </p>

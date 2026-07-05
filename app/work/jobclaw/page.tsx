@@ -6,7 +6,7 @@ import { Figure } from "@/components/figure";
 export const metadata: Metadata = {
   title: "JobClaw",
   description:
-    "Autonomous scraper aggregating 30,000+ company ATS feeds and broadcasting fresh listings to Discord every hour — five sequential workers, atomic hash dedup, decoupled micro-scrapers.",
+    "Autonomous scraper aggregating 30,000+ company ATS feeds and broadcasting fresh listings to Discord every hour: five sequential workers, atomic hash dedup, decoupled micro-scrapers.",
 };
 
 export default function JobClawPage() {
@@ -25,7 +25,7 @@ export default function JobClawPage() {
       <Prose>
         <p>
           Job boards lie about freshness. The same listing surfaces on three
-          aggregators, two cross-posts, and a recruiter&apos;s feed —
+          aggregators, two cross-posts, and a recruiter&apos;s feed,
           frequently after it&apos;s already closed. <strong>JobClaw</strong>{" "}
           skips the middlemen and pulls directly from each company&apos;s
           applicant tracking system (Greenhouse, Lever, Ashby, Workday,
@@ -39,33 +39,33 @@ export default function JobClawPage() {
           different rate-limit profiles. Hammering every endpoint constantly
           is wasteful and gets you banned. The fix is five workers chained{" "}
           <em>one after the other</em>, running through the entire 30,000-
-          company catalogue exactly once an hour — so every listing is at
+          company catalogue exactly once an hour, so every listing is at
           most ~60 minutes stale, and a single ATS outage can&apos;t take
           down the rest of the chain:
         </p>
         <ol>
           <li>
-            <strong>Worker 1 — Fast Tier.</strong> RSS + GitHub feeds +
-            Greenhouse / Lever / Ashby. The cheapest, fastest-moving sources
-            — fetched first so the rest of the run already has a hot cache.
+            <strong>Worker 1: Fast Tier.</strong> RSS + GitHub feeds +
+            Greenhouse / Lever / Ashby, the cheapest, fastest-moving sources,
+            fetched first so the rest of the run already has a hot cache.
           </li>
           <li>
-            <strong>Worker 2 — Medium Tier.</strong> Workday / Rippling /
+            <strong>Worker 2: Medium Tier.</strong> Workday / Rippling /
             SmartRecruiters. Heavier endpoints, deeper rate limits, polled
             with backoff.
           </li>
           <li>
-            <strong>Worker 3 — Deep Push.</strong> A wide crawl across the
+            <strong>Worker 3: Deep Push.</strong> A wide crawl across the
             full 30,000-company catalogue. Catches everything the tier
             scrapers don&apos;t cover and bounds long-tail staleness.
           </li>
           <li>
-            <strong>Worker 4 — Discord Push.</strong> Atomic broadcast of
+            <strong>Worker 4: Discord Push.</strong> Atomic broadcast of
             every newly-hashed listing from this hour. Nothing posted unless
             it cleared the dedup gate.
           </li>
           <li>
-            <strong>Worker 5 — Registry Expander.</strong> Discovers new ATS
+            <strong>Worker 5: Registry Expander.</strong> Discovers new ATS
             endpoints and feeds them back into the catalogue so it grows
             without me babysitting it.
           </li>
@@ -82,13 +82,13 @@ export default function JobClawPage() {
         alt="JobClaw GitHub Actions workflows page showing the five sequential workers"
         aspect="2509/1157"
         fit="contain"
-        caption="The five workers as GitHub Actions workflows — each completes before the next starts, and the chain runs every hour on the hour."
+        caption="The five workers as GitHub Actions workflows. Each completes before the next starts, and the chain runs every hour on the hour."
       />
 
       <Prose>
         <h2>Atomic dedup is the whole game</h2>
         <p>
-          The interesting part isn&apos;t scraping — it&apos;s the dedup. Each
+          The interesting part isn&apos;t scraping. It&apos;s the dedup. Each
           listing gets a stable hash computed from{" "}
           <code>(company, title, location, source_url)</code>. Inserts go
           through a SQLite WAL-mode table with a uniqueness constraint on the
@@ -101,7 +101,7 @@ export default function JobClawPage() {
           The decoupling matters too: each micro-scraper writes only its
           slice of the table and never reads another scraper&apos;s state.
           That lets me kill a single ATS poller without bringing down the
-          rest of the fleet — and it makes the GitHub Actions concurrency
+          rest of the fleet, and it makes the GitHub Actions concurrency
           model match the data model exactly.
         </p>
 
@@ -121,7 +121,7 @@ export default function JobClawPage() {
         alt="Discord #general channel showing JobClaw broadcasting Software Engineer Frontend roles at Ramp and Suno with company, location, posted time, and source"
         aspect="1945/1026"
         fit="contain"
-        caption="The output side — JobClaw posting fresh frontend roles. Each card carries source, company, location, and posted-time so triage takes seconds, not minutes."
+        caption="The output side: JobClaw posting fresh frontend roles. Each card carries source, company, location, and posted-time so triage takes seconds, not minutes."
       />
 
       <Prose>

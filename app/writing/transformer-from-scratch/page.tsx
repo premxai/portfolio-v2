@@ -6,7 +6,7 @@ import { Prose } from "@/components/prose";
 export const metadata: Metadata = {
   title: "Transformer from Scratch",
   description:
-    'A walkthrough of reimplementing "Attention Is All You Need" in raw PyTorch — what finally clicked, and what I got wrong the first three times.',
+    'A walkthrough of reimplementing "Attention Is All You Need" in raw PyTorch: what finally clicked, and what I got wrong the first three times.',
 };
 
 export default function TransformerFromScratchPage() {
@@ -24,8 +24,8 @@ export default function TransformerFromScratchPage() {
           Transformer from Scratch
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[color:var(--color-fg-muted)] max-w-3xl text-pretty">
-          Reimplementing &ldquo;Attention Is All You Need&rdquo; in raw PyTorch
-          — what finally clicked, and what I got wrong the first three times.
+          Reimplementing &ldquo;Attention Is All You Need&rdquo; in raw PyTorch:
+          what finally clicked, and what I got wrong the first three times.
         </p>
         <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
           <Meta term="Published" value="April 2025" />
@@ -51,8 +51,8 @@ export default function TransformerFromScratchPage() {
         <p>
           I&apos;d read the paper a dozen times. I&apos;d used HuggingFace and
           shipped real models. But I&apos;d never sat down and written every
-          line — embeddings, attention, masking, the encoder, the decoder,
-          the training loop — without copying anything. So I did. This article
+          line (embeddings, attention, masking, the encoder, the decoder,
+          the training loop) without copying anything. So I did. This article
           is what I&apos;d hand to past-me to skip the worst of the confusion.
         </p>
 
@@ -70,12 +70,12 @@ export default function TransformerFromScratchPage() {
           <li>
             <strong>Token + positional embeddings.</strong> The smallest piece
             and the easiest to get wrong. The positional encoding is just a
-            fixed sinusoidal pattern added to the token embedding — but
+            fixed sinusoidal pattern added to the token embedding, but
             it&apos;s the choice that lets attention work on un-ordered sets.
           </li>
           <li>
-            <strong>Scaled dot-product attention.</strong> Three projections —
-            Q, K, V — and the famous{" "}
+            <strong>Scaled dot-product attention.</strong> Three projections,
+            Q, K, V, and the famous{" "}
             <code>softmax(QK^T / sqrt(d_k)) V</code>. The{" "}
             <code>sqrt(d_k)</code> isn&apos;t cosmetic; without it, large
             dimensions push softmax into vanishing-gradient territory.
@@ -92,7 +92,7 @@ export default function TransformerFromScratchPage() {
           </li>
           <li>
             <strong>Encoder + decoder stacks.</strong> Residual connections
-            around every sub-layer, layer norm before (or after) — the
+            around every sub-layer, layer norm before (or after): the
             order matters more than you&apos;d think.
           </li>
         </ol>
@@ -118,8 +118,8 @@ export default function TransformerFromScratchPage() {
           </li>
           <li>
             <strong>Warmup matters.</strong> The Noam schedule (linear warmup,
-            then 1/sqrt(step) decay) isn&apos;t a hyperparameter you tune —
-            it&apos;s load-bearing. Train without it and the loss goes flat.
+            then 1/sqrt(step) decay) isn&apos;t a hyperparameter you tune.
+            It&apos;s load-bearing. Train without it and the loss goes flat.
           </li>
         </ul>
 
@@ -129,16 +129,16 @@ export default function TransformerFromScratchPage() {
         </p>
         <ul>
           <li>
-            <code>x: (B, S, D)</code> — batch, sequence length, model dim.
+            <code>x: (B, S, D)</code>: batch, sequence length, model dim.
           </li>
           <li>
-            <code>q, k, v: (B, H, S, D/H)</code> — split across heads.
+            <code>q, k, v: (B, H, S, D/H)</code>: split across heads.
           </li>
           <li>
-            <code>scores: (B, H, S, S)</code> — attention scores per head.
+            <code>scores: (B, H, S, S)</code>: attention scores per head.
           </li>
           <li>
-            <code>mask: (S, S) or (B, 1, 1, S)</code> — broadcasts over what
+            <code>mask: (S, S) or (B, 1, 1, S)</code>: broadcasts over what
             it doesn&apos;t cover.
           </li>
         </ul>
@@ -170,7 +170,7 @@ export default function TransformerFromScratchPage() {
           >
             GitHub
           </a>
-          . It&apos;s deliberately small — one file per concept, no abstraction
+          . It&apos;s deliberately small: one file per concept, no abstraction
           for its own sake. Read it top-to-bottom and you&apos;ll have a
           working transformer in your head.
         </p>

@@ -61,22 +61,22 @@ export default function AboutPage() {
 
       <Prose className="container-prose px-0">
         <p>
-          I&apos;m Prem — an inference engineer focused on{" "}
+          I&apos;m Prem, an inference engineer focused on{" "}
           <strong>low-latency LLM serving</strong>, multi-model routing, and
           cost-efficient production AI infrastructure. I&apos;ve deployed
           scalable AI systems on GCP and AWS with a hard bias toward latency,
-          reliability, and the cost-latency-accuracy tradeoff — not whichever
+          reliability, and the cost-latency-accuracy tradeoff, not whichever
           framework is trending this quarter.
         </p>
         <p>
           Right now I&apos;m finishing my M.S. in Artificial Intelligence at
           the Rochester Institute of Technology and shipping{" "}
-          <a href="/work/emotion-engine">Emotion Engine</a> — a research
+          <a href="/work/emotion-engine">Emotion Engine</a>, a research
           project showing that emotion-like internal states (fear, grief,
           suspicion) emerge from a 72-feature predictive LSTM with no
           hardcoded rules (p = 3.3e-113 across 205K agent-step records).
           Before RIT, I built a production LLM routing layer at{" "}
-          <a href="/work/llm-routing">Concentrix + Webhelp</a> — 3+ foundation
+          <a href="/work/llm-routing">Concentrix + Webhelp</a>: 3+ foundation
           models, 1.5s end-to-end, 18% cost reduction, 42% fewer incidents.
         </p>
         <p>
@@ -88,7 +88,7 @@ export default function AboutPage() {
         <ul>
           {education.map((e) => (
             <li key={e.school}>
-              <strong>{e.degree}</strong> — {e.school},{" "}
+              <strong>{e.degree}</strong> · {e.school},{" "}
               <span className="text-[color:var(--color-fg-muted)]">
                 {e.start} – {e.end}
               </span>
@@ -100,7 +100,7 @@ export default function AboutPage() {
         <ul>
           {experience.map((e) => (
             <li key={e.company}>
-              <strong>{e.role}</strong>, {e.company} —{" "}
+              <strong>{e.role}</strong>, {e.company} ·{" "}
               <span className="text-[color:var(--color-fg-muted)]">
                 {e.start} – {e.end}
               </span>
@@ -119,7 +119,7 @@ export default function AboutPage() {
               ) : (
                 <strong>{p.title}</strong>
               )}
-              {" — "}
+              {" · "}
               {p.abstract}
             </li>
           ))}
@@ -136,7 +136,7 @@ export default function AboutPage() {
               ) : (
                 <strong>{c.title}</strong>
               )}
-              {" — "}
+              {" · "}
               <span className="text-[color:var(--color-fg-muted)]">
                 {c.issuer}
               </span>

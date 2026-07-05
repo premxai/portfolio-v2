@@ -28,7 +28,7 @@ export type Project = {
   /**
    * How to fit the hero image/video inside the 16:9 container.
    * - `cover` (default): fills the box, may crop the image.
-   * - `contain`: shows the whole image with letterboxing — use this for UI
+   * - `contain`: shows the whole image with letterboxing. Use for UI
    *   screenshots that shouldn't be cropped.
    */
   heroFit?: "cover" | "contain";
@@ -90,7 +90,7 @@ export const projects: Project[] = [
   {
     slug: "sushi",
     title: "Sushi",
-    tagline: "Premium EDA platform — automated data quality, stats, and visualizations.",
+    tagline: "Premium EDA platform for automated data quality, stats, and visualizations.",
     year: "2025",
     period: "Feb 2025 – Apr 2025",
     status: "live",

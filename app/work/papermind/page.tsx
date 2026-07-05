@@ -5,7 +5,7 @@ import { Prose } from "@/components/prose";
 export const metadata: Metadata = {
   title: "PaperMind",
   description:
-    "Autonomous arXiv research assistant orchestrating 5 specialized agents — Literature, Methods, Results, Critique, and Synthesis — over a FAISS-backed RAG stack.",
+    "Autonomous arXiv research assistant orchestrating 5 specialized agents (Literature, Methods, Results, Critique, and Synthesis) over a FAISS-backed RAG stack.",
 };
 
 export default function PaperMindPage() {
@@ -15,7 +15,7 @@ export default function PaperMindPage() {
         slug="papermind"
         label="// case study · tooling"
         title="Five agents that read the paper so you don't have to."
-        tagline="An autonomous arXiv research assistant — fetches papers, builds a FAISS index, and orchestrates five specialist agents to produce a literature review, methods comparison, results analysis, critique, and gap synthesis in one report."
+        tagline="An autonomous arXiv research assistant that fetches papers, builds a FAISS index, and orchestrates five specialist agents to produce a literature review, methods comparison, results analysis, critique, and gap synthesis in one report."
         period="Jan 2026 – May 2026"
         role="Sole engineer"
         repo="https://github.com/premxai/papermind"
@@ -29,7 +29,7 @@ export default function PaperMindPage() {
           it fall short, and what&apos;s the open question?</em>{" "}
           <strong>PaperMind</strong> automates that loop. You point it at an
           arXiv ID (or drop in a PDF), and it produces a single research
-          report by routing the work across five specialist agents — each
+          report by routing the work across five specialist agents, each
           with its own retrieval window and prompt shape.
         </p>
 
@@ -65,24 +65,24 @@ export default function PaperMindPage() {
         <h2>The five agents</h2>
         <ul>
           <li>
-            <strong>Literature Agent</strong> — finds and summarises related
+            <strong>Literature Agent:</strong> finds and summarises related
             work the paper cites or competes with.
           </li>
           <li>
-            <strong>Methods Agent</strong> — extracts the technique, ablation
+            <strong>Methods Agent:</strong> extracts the technique, ablation
             structure, and where it differs from prior approaches.
           </li>
           <li>
-            <strong>Results Agent</strong> — pulls numbers, benchmark tables,
+            <strong>Results Agent:</strong> pulls numbers, benchmark tables,
             and headline claims out of the experiments section.
           </li>
           <li>
-            <strong>Critique Agent</strong> — evaluates strengths,
+            <strong>Critique Agent:</strong> evaluates strengths,
             limitations, and likely failure modes that aren&apos;t explicit
             in the paper.
           </li>
           <li>
-            <strong>Synthesis Agent</strong> — turns the four upstream outputs
+            <strong>Synthesis Agent:</strong> turns the four upstream outputs
             into a coherent narrative with a research-gap section and
             suggested next questions.
           </li>
@@ -103,7 +103,7 @@ export default function PaperMindPage() {
         <p>
           Reports export to Markdown, PDF, HTML, JSON, or DOCX. The JSON
           export is structured so a downstream pipeline can pick up specific
-          fields — e.g. for a literature-review aggregator or a paper-of-the-
+          fields, e.g. for a literature-review aggregator or a paper-of-the-
           week digest.
         </p>
 
@@ -116,8 +116,8 @@ export default function PaperMindPage() {
           </li>
           <li>
             Run an eval set comparing PaperMind reports to human-written
-            summaries on a few well-known papers — pick a small benchmark
-            and grade each agent independently.
+            summaries on a few well-known papers, using a small benchmark
+            and grading each agent independently.
           </li>
           <li>
             Streamline the Streamlit UI into a single view per paper instead

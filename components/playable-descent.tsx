@@ -36,6 +36,10 @@ const VERDICT_LABEL: Record<Verdict, string> = {
   diverging: "diverging, lr too high",
 };
 
+// Canvas-safe monospace stack. Canvas font strings cannot resolve CSS
+// variables like var(--font-mono), so this mirrors the site's mono stack.
+const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+
 export function PlayableDescent() {
   const [open, setOpen] = useState(false);
 
@@ -74,6 +78,8 @@ function DescentLab({ onClose }: { onClose: () => void }) {
   const draggingRef = useRef(false);
   const stepsRef = useRef(0);
   const trailRef = useRef<number[]>([]);
+  // Rolling loss history for the live "training curve" sparkline.
+  const historyRef = useRef<number[]>([]);
 
   // Readout DOM refs (updated directly in the loop for perf).
   const lossOut = useRef<HTMLSpanElement | null>(null);
@@ -105,6 +111,7 @@ function DescentLab({ onClose }: { onClose: () => void }) {
     stateRef.current = { x, v: 0 };
     stepsRef.current = 0;
     trailRef.current = [];
+    historyRef.current = [];
     runningRef.current = true;
   }, []);
 
@@ -118,6 +125,16 @@ function DescentLab({ onClose }: { onClose: () => void }) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const range = lossRange();
     const curve = sampleCurve(240);
+
+    // Horizontal gridline values at tidy 0.25 intervals inside the range.
+    const lossTicks: number[] = [];
+    for (
+      let v = Math.ceil(range.min / 0.25) * 0.25;
+      v < range.max;
+      v += 0.25
+    ) {
+      lossTicks.push(+v.toFixed(2));
+    }
 
     // Padding around the plot, in CSS px.
     const PAD = { l: 28, r: 28, t: 28, b: 28 };
@@ -156,15 +173,64 @@ function DescentLab({ onClose }: { onClose: () => void }) {
     function draw() {
       const c = readColors();
       ctx!.clearRect(0, 0, W, H);
+      const axisY = H - PAD.b;
 
-      // Curve fill
+      // Loss gridlines + tick labels: the plot chrome that makes this read
+      // as a chart rather than a doodle.
+      ctx!.font = `8px ${MONO}`;
+      ctx!.textAlign = "left";
+      ctx!.textBaseline = "bottom";
+      for (const tv of lossTicks) {
+        const y = sy(tv);
+        ctx!.lineWidth = 1;
+        ctx!.strokeStyle = hexA(c.subtle, 0.12);
+        ctx!.beginPath();
+        ctx!.moveTo(PAD.l, y);
+        ctx!.lineTo(W - PAD.r, y);
+        ctx!.stroke();
+        ctx!.fillStyle = hexA(c.subtle, 0.55);
+        ctx!.fillText(tv.toFixed(2), PAD.l + 2, y - 2);
+      }
+
+      // θ axis baseline with a few ticks.
+      ctx!.strokeStyle = hexA(c.subtle, 0.3);
+      ctx!.beginPath();
+      ctx!.moveTo(PAD.l, axisY);
+      ctx!.lineTo(W - PAD.r, axisY);
+      ctx!.stroke();
+      ctx!.textBaseline = "top";
+      for (const tx of [0, 0.5, 1]) {
+        const x = sx(tx);
+        ctx!.beginPath();
+        ctx!.moveTo(x, axisY);
+        ctx!.lineTo(x, axisY + 4);
+        ctx!.stroke();
+        ctx!.textAlign = tx === 0 ? "left" : tx === 1 ? "right" : "center";
+        ctx!.fillStyle = hexA(c.subtle, 0.55);
+        ctx!.fillText(tx === 0.5 ? "0.5" : String(tx), x, axisY + 6);
+      }
+      // Axis names.
+      ctx!.font = `9px ${MONO}`;
+      ctx!.textAlign = "right";
+      ctx!.textBaseline = "bottom";
+      ctx!.fillStyle = hexA(c.subtle, 0.7);
+      ctx!.fillText("θ", W - PAD.r - 4, axisY - 6);
+      ctx!.textAlign = "left";
+      ctx!.textBaseline = "middle";
+      ctx!.fillText("L(θ)", PAD.l, 12);
+
+      // Curve fill, warmed toward the bottom: lower loss reads as heat,
+      // matching the tinted contours on the page background.
+      const fillGrad = ctx!.createLinearGradient(0, PAD.t, 0, axisY);
+      fillGrad.addColorStop(0, "rgba(120,120,140,0.04)");
+      fillGrad.addColorStop(1, hexA(c.accent, 0.08));
       ctx!.beginPath();
       ctx!.moveTo(sx(0), sy(curve[0].L));
       for (const p of curve) ctx!.lineTo(sx(p.x), sy(p.L));
-      ctx!.lineTo(sx(1), H - PAD.b);
-      ctx!.lineTo(sx(0), H - PAD.b);
+      ctx!.lineTo(sx(1), axisY);
+      ctx!.lineTo(sx(0), axisY);
       ctx!.closePath();
-      ctx!.fillStyle = "rgba(120,120,140,0.06)";
+      ctx!.fillStyle = fillGrad;
       ctx!.fill();
 
       // Curve stroke
@@ -177,15 +243,42 @@ function DescentLab({ onClose }: { onClose: () => void }) {
       ctx!.stroke();
       ctx!.globalAlpha = 1;
 
-      // Local-minima ticks
+      // Minima markers, same vocabulary as the background map: × on the
+      // local minima, a concentric target on the global one.
       for (const w of WELLS) {
         const isGlobal = Math.abs(w.c - GLOBAL_MIN_X) < 0.02;
         const px = sx(w.c);
         const py = sy(loss(w.c));
-        ctx!.beginPath();
-        ctx!.arc(px, py, isGlobal ? 3 : 2, 0, Math.PI * 2);
-        ctx!.fillStyle = isGlobal ? "rgba(168,132,255,0.9)" : c.subtle;
-        ctx!.fill();
+        if (isGlobal) {
+          ctx!.lineWidth = 1;
+          ctx!.strokeStyle = "rgba(168,132,255,0.6)";
+          for (const r of [3, 7]) {
+            ctx!.beginPath();
+            ctx!.arc(px, py, r, 0, Math.PI * 2);
+            ctx!.stroke();
+          }
+          ctx!.font = `9px ${MONO}`;
+          ctx!.textAlign = "left";
+          ctx!.textBaseline = "bottom";
+          ctx!.fillStyle = "rgba(168,132,255,0.7)";
+          ctx!.fillText("global min", px + 11, py - 6);
+        } else {
+          ctx!.lineWidth = 1;
+          ctx!.strokeStyle = hexA(c.subtle, 0.6);
+          ctx!.beginPath();
+          ctx!.moveTo(px - 3.5, py - 3.5);
+          ctx!.lineTo(px + 3.5, py + 3.5);
+          ctx!.moveTo(px + 3.5, py - 3.5);
+          ctx!.lineTo(px - 3.5, py + 3.5);
+          ctx!.stroke();
+          if (Math.abs(w.depth - 0.62) < 0.01) {
+            ctx!.font = `9px ${MONO}`;
+            ctx!.textAlign = "left";
+            ctx!.textBaseline = "bottom";
+            ctx!.fillStyle = hexA(c.subtle, 0.6);
+            ctx!.fillText("local min", px + 7, py - 5);
+          }
+        }
       }
 
       // Global-minimum orb (sonar rings), skipped under reduced motion.
@@ -248,6 +341,33 @@ function DescentLab({ onClose }: { onClose: () => void }) {
       ctx!.lineWidth = 1.5;
       ctx!.strokeStyle = "rgba(255,255,255,0.5)";
       ctx!.stroke();
+
+      // Live training curve: loss vs step, in the top margin. Watch it
+      // stair-step down on a good run, oscillate when lr is too high, and
+      // flatline early when stuck in a local minimum.
+      const hist = historyRef.current;
+      const spW = 110;
+      const spH = 18;
+      const spX = W - PAD.r - spW;
+      const spY = 5;
+      ctx!.font = `8px ${MONO}`;
+      ctx!.textAlign = "right";
+      ctx!.textBaseline = "middle";
+      ctx!.fillStyle = hexA(c.subtle, 0.6);
+      ctx!.fillText("loss / step", spX - 8, spY + spH / 2);
+      if (hist.length > 1) {
+        ctx!.lineWidth = 1;
+        ctx!.strokeStyle = hexA(c.accent, 0.9);
+        ctx!.beginPath();
+        for (let i = 0; i < hist.length; i++) {
+          const hx = spX + (i / (hist.length - 1)) * spW;
+          const hy =
+            spY + (1 - (hist[i] - range.min) / (range.max - range.min)) * spH;
+          if (i === 0) ctx!.moveTo(hx, hy);
+          else ctx!.lineTo(hx, hy);
+        }
+        ctx!.stroke();
+      }
     }
 
     let frame = 0;
@@ -264,6 +384,9 @@ function DescentLab({ onClose }: { onClose: () => void }) {
         const trail = trailRef.current;
         trail.push(next.x);
         if (trail.length > 60) trail.shift();
+        const hist = historyRef.current;
+        hist.push(loss(Math.max(0, Math.min(1, next.x))));
+        if (hist.length > 300) hist.shift();
 
         const v = classify(next);
         // Stop stepping once settled or clearly diverged (keep drawing).
@@ -306,6 +429,7 @@ function DescentLab({ onClose }: { onClose: () => void }) {
       draggingRef.current = true;
       runningRef.current = false;
       trailRef.current = [];
+      historyRef.current = [];
       stepsRef.current = 0;
       const x = pointerToX(e);
       stateRef.current = { x, v: 0 };

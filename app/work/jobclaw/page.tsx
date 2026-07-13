@@ -4,44 +4,44 @@ import { Prose } from "@/components/prose";
 import { Figure } from "@/components/figure";
 
 export const metadata: Metadata = {
-  title: "JobClaw",
+  title: "Nori",
   description:
-    "Autonomous scraper aggregating 30,000+ company ATS feeds and broadcasting fresh listings to Discord every hour: five sequential workers, atomic hash dedup, decoupled micro-scrapers.",
+    "AI job discovery and ranking backed by a registry covering 31,000+ companies, bounded ATS adapters, Redis queues, and duplicate filtering.",
 };
 
-export default function JobClawPage() {
+export default function NoriPage() {
   return (
     <article>
       <CaseStudyHeader
         slug="jobclaw"
         label="// case study · tooling"
-        title="Thirty thousand ATS feeds, one Discord channel, hourly heartbeat."
-        tagline="An autonomous job-listing scraper that quietly stalks 30,000+ company ATS endpoints, dedups across runs with atomic hashes, and broadcasts fresh roles to Discord without ever posting the same job twice."
+        title="A registry of 31,000+ companies, one ranked discovery pipeline."
+        tagline="An AI job-discovery platform with bounded ATS adapters, queued processing, sentence-transformer ranking, and duplicate filtering across scheduled collection workflows."
         period="Feb 2026 – present"
         role="Sole engineer"
         repo="https://github.com/premxai/jobclaw"
+        demo="https://www.norinote.xyz/"
       />
 
       <Prose>
         <p>
           Job boards lie about freshness. The same listing surfaces on three
           aggregators, two cross-posts, and a recruiter&apos;s feed,
-          frequently after it&apos;s already closed. <strong>JobClaw</strong>{" "}
+          frequently after it&apos;s already closed. <strong>Nori</strong>{" "}
           skips the middlemen and pulls directly from each company&apos;s
           applicant tracking system (Greenhouse, Lever, Ashby, Workday,
           SmartRecruiters, Rippling), hashes every role atomically, and only
           posts what&apos;s genuinely new.
         </p>
 
-        <h2>Five workers, one hour, every hour</h2>
+        <h2>Bounded workers over a large registry</h2>
         <p>
-          Different ATS feeds change at different speeds and have very
-          different rate-limit profiles. Hammering every endpoint constantly
-          is wasteful and gets you banned. The fix is five workers chained{" "}
-          <em>one after the other</em>, running through the entire 30,000-
-          company catalogue exactly once an hour, so every listing is at
-          most ~60 minutes stale, and a single ATS outage can&apos;t take
-          down the rest of the chain:
+          Different ATS feeds change at different speeds and have different
+          rate-limit profiles. Nori keeps a registry covering 31,000+
+          companies, then runs source-specific adapters in bounded scheduled
+          batches. The registry describes available coverage; it is not a
+          claim that every company is actively polled in every run. Separate
+          workers keep one ATS outage from taking down the rest of the flow:
         </p>
         <ol>
           <li>
@@ -55,9 +55,9 @@ export default function JobClawPage() {
             with backoff.
           </li>
           <li>
-            <strong>Worker 3: Deep Push.</strong> A wide crawl across the
-            full 30,000-company catalogue. Catches everything the tier
-            scrapers don&apos;t cover and bounds long-tail staleness.
+            <strong>Worker 3: Bounded Registry Batches.</strong> Processes
+            eligible registry records in controlled batches to extend
+            coverage without overwhelming source systems.
           </li>
           <li>
             <strong>Worker 4: Discord Push.</strong> Atomic broadcast of
@@ -79,7 +79,7 @@ export default function JobClawPage() {
 
       <Figure
         src="/projects/jobclaw-hero.png"
-        alt="JobClaw GitHub Actions workflows page showing the five sequential workers"
+        alt="Nori GitHub Actions workflows page showing the scheduled workers"
         aspect="2509/1157"
         fit="contain"
         caption="The five workers as GitHub Actions workflows. Each completes before the next starts, and the chain runs every hour on the hour."
@@ -118,10 +118,10 @@ export default function JobClawPage() {
 
       <Figure
         src="/projects/jobclaw-discord.png"
-        alt="Discord #general channel showing JobClaw broadcasting Software Engineer Frontend roles at Ramp and Suno with company, location, posted time, and source"
+        alt="Discord channel showing Nori broadcasting software engineering roles with company, location, posted time, and source"
         aspect="1945/1026"
         fit="contain"
-        caption="The output side: JobClaw posting fresh frontend roles. Each card carries source, company, location, and posted-time so triage takes seconds, not minutes."
+        caption="The output side: Nori posting fresh roles. Each card carries source, company, location, and posted-time for fast triage."
       />
 
       <Prose>

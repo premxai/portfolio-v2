@@ -13,39 +13,39 @@ export const metadata: Metadata = {
 const skills = {
   "Backend & Programming": [
     "Python",
+    "TypeScript",
     "SQL",
     "FastAPI",
     "REST APIs",
     "PostgreSQL",
-    "MongoDB",
-    "PySpark",
+    "Redis",
   ],
-  "Distributed Systems & Data": [
-    "Kafka",
-    "Streaming pipelines",
-    "Feature stores",
-    "Data pipelines",
-    "Vector DBs",
-    "System design",
+  "LLM & Retrieval Systems": [
+    "LLM APIs",
+    "AI agents",
+    "RAG",
+    "MCP",
+    "FAISS",
+    "BM25",
+    "Qdrant",
   ],
   "Cloud & Infrastructure": [
-    "GCP",
-    "AWS (EC2, S3, Bedrock, SageMaker)",
+    "AWS Bedrock",
+    "SageMaker",
     "Docker",
     "Kubernetes",
-    "Terraform",
     "CI/CD",
     "MLflow",
+    "CloudWatch",
   ],
   "Machine Learning": [
     "PyTorch",
-    "TensorFlow",
     "Scikit-learn",
-    "LLMs",
-    "RAG",
-    "NLP",
-    "Computer Vision",
-    "MCP",
+    "XGBoost",
+    "Model evaluation",
+    "Statistical analysis",
+    "Feature engineering",
+    "Drift monitoring",
   ],
 };
 
@@ -61,23 +61,19 @@ export default function AboutPage() {
 
       <Prose className="container-prose px-0">
         <p>
-          I&apos;m Prem, an inference engineer focused on{" "}
-          <strong>low-latency LLM serving</strong>, multi-model routing, and
-          cost-efficient production AI infrastructure. I&apos;ve deployed
-          scalable AI systems on GCP and AWS with a hard bias toward latency,
-          reliability, and the cost-latency-accuracy tradeoff, not whichever
-          framework is trending this quarter.
+          I&apos;m Prem, an AI/ML engineer focused on reliable LLM systems,
+          agent workflows, retrieval, evaluation, and applied machine
+          learning. I care about systems that can be measured, explained,
+          and operated under real latency, cost, and quality constraints.
         </p>
         <p>
-          Right now I&apos;m finishing my M.S. in Artificial Intelligence at
-          the Rochester Institute of Technology and shipping{" "}
-          <a href="/work/emotion-engine">Emotion Engine</a>, a research
-          project showing that emotion-like internal states (fear, grief,
-          suspicion) emerge from a 72-feature predictive LSTM with no
-          hardcoded rules (p = 3.3e-113 across 205K agent-step records).
-          Before RIT, I built a production LLM routing layer at{" "}
-          <a href="/work/llm-routing">Concentrix + Webhelp</a>: 3+ foundation
-          models, 1.5s end-to-end, 18% cost reduction, 42% fewer incidents.
+          I completed an M.S. in Artificial Intelligence at Rochester
+          Institute of Technology in May 2026 after an official Graduate
+          Researcher appointment on <a href="/work/emotion-engine">Emotion
+          Engine</a>. Before RIT, I owned a production LLM routing layer at{" "}
+          <a href="/work/llm-routing">Concentrix + Webhelp</a> serving 50K
+          daily requests across 3 foundation models, cutting p95 latency
+          from 4s to 1.5s and monthly inference spend from $45K to $37K.
         </p>
         <p>
           The throughline of everything on this site:{" "}

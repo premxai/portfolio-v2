@@ -6,7 +6,7 @@ import { Metric, MetricRow } from "@/components/metric";
 export const metadata: Metadata = {
   title: "Multi-Model LLM Routing",
   description:
-    "Production routing across 3+ foundation models at 1.5s end-to-end latency. 18% cost cut, 42% fewer incidents.",
+    "Production routing across 3 foundation models, cutting p95 latency from 4s to 1.5s and monthly spend from $45K to $37K.",
 };
 
 export default function LlmRoutingPage() {
@@ -15,7 +15,7 @@ export default function LlmRoutingPage() {
       <CaseStudyHeader
         slug="llm-routing"
         label="// case study · production"
-        title="Routing three foundation models at 1.5s, without paying for it twice."
+        title="Routing three foundation models at 1.5s p95 without paying for it twice."
         tagline="A production multi-model LLM inference layer behind enterprise applications, owning latency, cost, and reliability under varying load."
         period="Feb 2024 – Jul 2024"
         role="Generative AI Engineer at Concentrix + Webhelp"
@@ -35,9 +35,8 @@ export default function LlmRoutingPage() {
         <h2>The constraints</h2>
         <ul>
           <li>
-            <strong>Latency budget.</strong> End-to-end response had to feel
-            interactive across consumer-facing flows: sub-2s, ideally
-            sub-1.5s.
+            <strong>Latency budget.</strong> Production p95 latency had to
+            improve from a 4s baseline while preserving response quality.
           </li>
           <li>
             <strong>Cost ceiling.</strong> Inference spend was the largest
@@ -84,22 +83,22 @@ export default function LlmRoutingPage() {
         <MetricRow>
           <Metric
             value="1.5s"
-            label="End-to-end latency"
-            hint="p50 across all routes"
+            label="Production p95 latency"
+            hint="down from 4s"
           />
           <Metric
-            value="−18%"
-            label="Inference cost"
-            hint="vs single-model baseline"
+            value="$45K to $37K"
+            label="Monthly inference spend"
+            hint="routing, caching, and fallback"
           />
           <Metric
             value="95%+"
-            label="Response accuracy"
+            label="Task success"
             hint="under varying constraints"
           />
           <Metric
-            value="−42% / +35%"
-            label="Prod incidents / MTTD"
+            value="−42% / −35%"
+            label="Incidents / MTTD"
             hint="thanks to inline observability"
           />
         </MetricRow>

@@ -1,10 +1,10 @@
 export const site = {
   name: "Prem Babu Kanaparthi",
   shortName: "Prem Kanaparthi",
-  role: "Inference Engineer",
-  tagline: "Low-latency LLM serving, multi-model routing, and cost-efficient production AI.",
+  role: "AI/ML Engineer",
+  tagline: "Reliable LLM, agent, retrieval, evaluation, and applied machine learning systems.",
   ethos: "Simple systems scale better than clever ones.",
-  location: "New York",
+  location: "United States",
   email: "prem.b.kanaparthi@gmail.com",
   phone: "(585) 290-3036",
   resumeHref: "/resume.pdf",

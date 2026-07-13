@@ -18,9 +18,9 @@ export default function EmotionEnginePage() {
         title="Can emotions emerge from prediction alone?"
         tagline="A 72-feature LSTM, trained only to predict future world events, independently rediscovers fear, grief, and suspicion as functional internal states, with no hardcoded appraisal rules."
         period="Feb 2026 – Apr 2026"
-        role="Sole researcher"
+        role="Graduate Researcher at Rochester Institute of Technology"
         repo="https://github.com/premxai/emotion_engine"
-        demo="https://github.com/premxai/emotion-engine-web"
+        demo="https://web-production-91496.up.railway.app/poster/"
       />
 
       <Prose>

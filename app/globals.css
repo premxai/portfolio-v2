@@ -91,6 +91,7 @@
 
 @layer components {
   .container-page {
+    box-sizing: border-box;
     width: 100%;
     max-width: var(--container-page);
     margin-inline: auto;
@@ -98,6 +99,7 @@
   }
 
   .container-prose {
+    box-sizing: border-box;
     width: 100%;
     max-width: var(--container-prose);
     margin-inline: auto;

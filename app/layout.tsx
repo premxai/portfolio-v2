@@ -60,7 +60,7 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col pb-12">
+      <body className="min-h-screen flex flex-col pb-12 overflow-x-clip">
         <ThemeProvider>
           <PageBackground />
           <HomeOnly>

@@ -65,7 +65,7 @@ export const experience: Experience[] = [
     company: "iNeuron AI",
     role: "ML Engineer Intern",
     location: "Bengaluru, India",
-    start: "Jun 2023",
+    start: "Aug 2022",
     end: "Aug 2023",
     blurb: "Built learner dropout-risk and phishing URL classifiers with feature and data-quality pipelines.",
     bullets: [

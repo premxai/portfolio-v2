@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Prose } from "@/components/prose";
 import { site } from "@/data/site";
 import { education, experience } from "@/data/experience";
@@ -14,6 +15,7 @@ const skills = {
   "Backend & Programming": [
     "Python",
     "TypeScript",
+    "Rust",
     "SQL",
     "FastAPI",
     "REST APIs",
@@ -28,6 +30,7 @@ const skills = {
     "FAISS",
     "BM25",
     "Qdrant",
+    "Meilisearch",
   ],
   "Cloud & Infrastructure": [
     "AWS Bedrock",
@@ -76,6 +79,17 @@ export default function AboutPage() {
           from 4s to 1.5s and monthly inference spend from $45K to $37K.
         </p>
         <p>
+          My recent public work spans agent infrastructure, search, and
+          product engineering:{" "}
+          <a href="https://kerna.run/" target="_blank" rel="noopener noreferrer">Kerna</a>{" "}
+          wraps agent tool use with fail-closed policy and receipts,{" "}
+          <a href="https://www.cryoweb.xyz/" target="_blank" rel="noopener noreferrer">Cryo</a>{" "}
+          searches a frozen pre-2022 corpus, and{" "}
+          <a href="https://www.norinote.xyz/" target="_blank" rel="noopener noreferrer">Nori</a>{" "}
+          and <a href="https://trysushi.xyz/" target="_blank" rel="noopener noreferrer">Sushi</a>{" "}
+          turn data pipelines into usable products.
+        </p>
+        <p>
           The throughline of everything on this site:{" "}
           <em>&ldquo;{site.ethos}&rdquo;</em>
         </p>
@@ -96,7 +110,9 @@ export default function AboutPage() {
         <ul>
           {experience.map((e) => (
             <li key={e.company}>
-              <strong>{e.role}</strong>, {e.company} ·{" "}
+              <Link href={`/experience/${e.slug}`}>
+                <strong>{e.role}</strong>, {e.company}
+              </Link>{" "}·{" "}
               <span className="text-[color:var(--color-fg-muted)]">
                 {e.start} – {e.end}
               </span>

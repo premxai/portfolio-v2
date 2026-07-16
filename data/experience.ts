@@ -1,4 +1,5 @@
 export type Experience = {
+  slug: string;
   company: string;
   role: string;
   location: string;
@@ -6,10 +7,14 @@ export type Experience = {
   end: string;
   blurb: string;
   bullets: string[];
+  stack: string[];
+  relatedHref?: string;
+  relatedLabel?: string;
 };
 
 export const experience: Experience[] = [
   {
+    slug: "rit-graduate-researcher",
     company: "Rochester Institute of Technology",
     role: "Graduate Researcher",
     location: "Rochester, NY",
@@ -20,8 +25,12 @@ export const experience: Experience[] = [
       "Extended Stanford's Generative Agents with a 72-feature LSTM predictive model, controlled scenarios, ablations, and statistical comparisons across 205,940 agent-step records.",
       "Validated statistically significant emergent emotion patterns against Gallup 2024 human baselines and documented model behavior, limitations, and failure modes in a research poster.",
     ],
+    stack: ["Python", "PyTorch", "LSTM", "Multi-agent simulation", "Ablation studies", "Statistical analysis"],
+    relatedHref: "/work/emotion-engine",
+    relatedLabel: "Read the Emotion Engine case study",
   },
   {
+    slug: "concentrix-generative-ai-engineer",
     company: "Concentrix + Webhelp",
     role: "Generative AI Engineer",
     location: "Newark, CA",
@@ -33,8 +42,12 @@ export const experience: Experience[] = [
       "Built production LLM evaluation and safety gates with CloudWatch logging, hallucination checks, drift monitoring, and a 500-case test set; reduced incidents by 42% and MTTD by 35%.",
       "Reduced monthly inference spend from $45K to $37K through cost-aware routing, prompt caching, and provider fallback while maintaining 95%+ task success.",
     ],
+    stack: ["Python", "AWS Bedrock", "SageMaker", "LiteLLM", "CloudWatch", "LLM evaluation"],
+    relatedHref: "/work/llm-routing",
+    relatedLabel: "Read the LLM routing case study",
   },
   {
+    slug: "alphabits-data-science-intern",
     company: "AlphaBits Technologies",
     role: "Data Science Intern",
     location: "Bengaluru, India",
@@ -45,8 +58,10 @@ export const experience: Experience[] = [
       "Rebuilt preprocessing, feature generation, SQL-backed analysis, and evaluation across 5 model variants; cut iteration time by 90% and improved relevance by 10%.",
       "Created an offline ranking evaluation harness tracking relevance, error cases, and preprocessing differences across model variants before deployment.",
     ],
+    stack: ["Python", "SQL", "Ranking models", "Feature engineering", "Offline evaluation"],
   },
   {
+    slug: "ineuron-ml-engineer-intern",
     company: "iNeuron AI",
     role: "ML Engineer Intern",
     location: "Bengaluru, India",
@@ -57,8 +72,10 @@ export const experience: Experience[] = [
       "Developed XGBoost classifiers for learner dropout risk (0.86 AUC across 12,000 learners) and phishing URL detection (20+ URL/domain features, 92% accuracy).",
       "Built a behavioral feature pipeline converting raw activity logs into 24 rolling-window features with drift and quality checks for retraining.",
     ],
+    stack: ["Python", "XGBoost", "Feature engineering", "Model evaluation", "Drift monitoring"],
   },
   {
+    slug: "exposys-software-developer-intern",
     company: "Exposys Data Labs",
     role: "Software Developer Intern",
     location: "Bengaluru, India",
@@ -69,6 +86,7 @@ export const experience: Experience[] = [
       "Built reusable React and Bootstrap interfaces and Node.js/Express REST APIs backed by PostgreSQL; client-side validation reduced order-entry errors by approximately 25%.",
       "Automated weekly SQL reporting and assisted API refactoring and database indexing that improved retrieval speed by approximately 20%; added Jest/Mocha tests with over 70% coverage on assigned modules.",
     ],
+    stack: ["JavaScript", "React", "Node.js", "Express", "PostgreSQL", "Jest", "Mocha"],
   },
 ];
 

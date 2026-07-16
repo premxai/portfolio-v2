@@ -178,7 +178,7 @@ function FeaturedWork() {
       label="// selected work"
       title="Selected systems I've shipped across agents, search, inference, and applied ML."
     >
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {flagshipProjects.map((project) => (
           <ProjectGridCard key={project.slug} project={project} />
         ))}

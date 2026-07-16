@@ -22,13 +22,16 @@ type Size = "card" | "hero";
 export function ProjectThumb({
   project,
   size = "card",
+  videoSrc,
   className,
 }: {
   project: Project;
   size?: Size;
+  videoSrc?: string;
   className?: string;
 }) {
   const src = size === "hero" ? project.hero ?? project.image : project.image;
+  const resolvedVideo = videoSrc ?? (size === "hero" ? project.heroVideo : undefined);
 
   const fit = size === "hero" ? project.heroFit ?? "cover" : "cover";
   const objectFitClass = fit === "contain" ? "object-contain" : "object-cover";
@@ -41,11 +44,11 @@ export function ProjectThumb({
         )
       : "relative shrink-0 size-28 md:size-40 overflow-hidden border border-[color:var(--color-border)] group-hover:border-[color:var(--color-accent)] transition-colors";
 
-  if (size === "hero" && project.heroVideo) {
+  if (size === "hero" && resolvedVideo) {
     return (
       <div className={cn(wrapperBase, className)}>
         <video
-          src={project.heroVideo}
+          src={resolvedVideo}
           poster={project.hero ?? project.image}
           autoPlay
           loop
@@ -53,8 +56,20 @@ export function ProjectThumb({
           playsInline
           preload="metadata"
           aria-label={project.title}
-          className={cn("absolute inset-0 size-full", objectFitClass)}
+          className={cn(
+            "absolute inset-0 size-full motion-reduce:hidden",
+            objectFitClass,
+          )}
         />
+        {src && (
+          <Image
+            src={src}
+            alt={project.title}
+            fill
+            sizes="(min-width: 1024px) 1024px, 100vw"
+            className={cn("hidden motion-reduce:block", objectFitClass)}
+          />
+        )}
       </div>
     );
   }

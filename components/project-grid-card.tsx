@@ -9,6 +9,7 @@ export function ProjectGridCard({ project }: { project: Project }) {
       <ProjectThumb
         project={project}
         size="hero"
+        videoSrc={project.featuredVideo}
         className="aspect-[16/10] border-0 border-b border-[color:var(--color-border)]"
       />
 

@@ -14,6 +14,8 @@ export type Project = {
   repo?: string;
   demo?: string;
   featured?: boolean;
+  /** Optional motion preview used only by selected-work cards. */
+  featuredVideo?: string;
   hasCaseStudy?: boolean;
   /** Square thumbnail (recommend 320×320). If absent, a placeholder is rendered. */
   image?: string;
@@ -87,6 +89,7 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/cryo",
     demo: "https://www.cryoweb.xyz/",
     featured: true,
+    featuredVideo: "/projects/cryo-home.mp4",
     hasCaseStudy: true,
     image: "/projects/cryo-work.webp",
     hero: "/projects/cryo-hero.jpg",

@@ -163,6 +163,7 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/sushi-eda",
     demo: "https://trysushi.xyz/",
     featured: false,
+    featuredVideo: "/projects/sushi-home.mp4",
     hasCaseStudy: true,
     image: "/projects/sushi-work.webp",
     hero: "/projects/sushi.png",

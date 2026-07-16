@@ -58,6 +58,18 @@ export const experience: Experience[] = [
       "Built a behavioral feature pipeline converting raw activity logs into 24 rolling-window features with drift and quality checks for retraining.",
     ],
   },
+  {
+    company: "Exposys Data Labs",
+    role: "Software Developer Intern",
+    location: "Bengaluru, India",
+    start: "May 2021",
+    end: "Jun 2022",
+    blurb: "Built and tested full-stack features for an internal inventory and order-management application.",
+    bullets: [
+      "Built reusable React and Bootstrap interfaces and Node.js/Express REST APIs backed by PostgreSQL; client-side validation reduced order-entry errors by approximately 25%.",
+      "Automated weekly SQL reporting and assisted API refactoring and database indexing that improved retrieval speed by approximately 20%; added Jest/Mocha tests with over 70% coverage on assigned modules.",
+    ],
+  },
 ];
 
 export type Education = {

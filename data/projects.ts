@@ -71,6 +71,7 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/jobclaw",
     demo: "https://www.norinote.xyz/",
     featured: true,
+    featuredVideo: "/projects/nori-home.mp4",
     hasCaseStudy: true,
     image: "/projects/nori-work.webp",
     hero: "/projects/jobclaw-hero.png",

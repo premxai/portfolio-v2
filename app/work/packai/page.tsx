@@ -6,7 +6,7 @@ import { Metric, MetricRow } from "@/components/metric";
 export const metadata: Metadata = {
   title: "PackAI",
   description:
-    "VS Code extension that orchestrates Claude, Copilot, and Codex in parallel via DAG planning and capability scoring.",
+    "Published VS Code extension for agent selection, dependency-ordered planning, and coordinated multi-file coding workflows.",
 };
 
 export default function PackAIPage() {
@@ -15,11 +15,12 @@ export default function PackAIPage() {
       <CaseStudyHeader
         slug="packai"
         label="// case study · tooling"
-        title="Three coding agents, one DAG, zero rate-limit cliffs."
-        tagline="A VS Code extension that decomposes natural-language project requests into a typed DAG, scores each task against agent capabilities, and runs Claude, Copilot, and Codex in parallel."
-        period="Apr 2025 – Jun 2025"
-        role="Designer & sole engineer"
-        repo="https://github.com/premxai/packai"
+        title="Plan once. Route each task to the right coding agent."
+        tagline="A published VS Code extension with agent selection, dependency-ordered DAG planning, multi-file coordination, dashboard controls, and reusable task playbooks."
+        period="2026"
+        role="Designer and engineer"
+        repo="https://github.com/premxai/PackAI"
+        demo="https://marketplace.visualstudio.com/items?itemName=premxai.packai"
       />
 
       <Prose>
@@ -85,9 +86,9 @@ export default function PackAIPage() {
             hint="Claude · Copilot · Codex"
           />
           <Metric
-            value="741+"
-            label="Vitest tests"
-            hint="across orchestrator + plan layers"
+            value="68%"
+            label="Benchmark recovery"
+            hint="of previously failed tasks completed"
           />
           <Metric
             value="5"
@@ -95,9 +96,9 @@ export default function PackAIPage() {
             hint="e-commerce, landing, dashboard, blog, generic"
           />
           <Metric
-            value="0"
-            label="Hard rate-limit failures"
-            hint="thanks to fallback queueing"
+            value="DAG"
+            label="Execution model"
+            hint="dependency-ordered task planning"
           />
         </MetricRow>
       </div>
@@ -108,8 +109,8 @@ export default function PackAIPage() {
           <li>
             <strong>State machine over framework.</strong> No LangGraph, no
             external agent library. The orchestrator is a plain TypeScript
-            state machine, easier to reason about, easier to test, and the
-            741+ tests reflect that.
+            state machine, which keeps planning and execution behavior easier
+            to inspect and test.
           </li>
           <li>
             <strong>Capability scores are configurable.</strong> Each user

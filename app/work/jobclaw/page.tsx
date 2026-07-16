@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { Prose } from "@/components/prose";
-import { Figure } from "@/components/figure";
+import { Metric, MetricRow } from "@/components/metric";
 
 export const metadata: Metadata = {
   title: "Nori",
   description:
-    "AI job discovery and ranking backed by a registry covering 31,000+ companies, bounded ATS adapters, Redis queues, and duplicate filtering.",
+    "AI job discovery and ranking backed by a registry covering 31,000+ companies, bounded ATS adapters, queues, and duplicate filtering.",
 };
 
 export default function NoriPage() {
@@ -14,138 +14,103 @@ export default function NoriPage() {
     <article>
       <CaseStudyHeader
         slug="jobclaw"
-        label="// case study · tooling"
-        title="A registry of 31,000+ companies, one ranked discovery pipeline."
-        tagline="An AI job-discovery platform with bounded ATS adapters, queued processing, sentence-transformer ranking, and duplicate filtering across scheduled collection workflows."
-        period="Feb 2026 – present"
-        role="Sole engineer"
+        label="// case study · product"
+        title="A large ATS registry is useful only if the pipeline stays quiet."
+        tagline="Nori turns direct company and ATS feeds into fresh, ranked job notes through bounded ingestion, source-specific adapters, duplicate filtering, and scheduled delivery."
+        period="2026 - present"
+        role="Designer and engineer"
         repo="https://github.com/premxai/jobclaw"
         demo="https://www.norinote.xyz/"
       />
 
       <Prose>
         <p>
-          Job boards lie about freshness. The same listing surfaces on three
-          aggregators, two cross-posts, and a recruiter&apos;s feed,
-          frequently after it&apos;s already closed. <strong>Nori</strong>{" "}
-          skips the middlemen and pulls directly from each company&apos;s
-          applicant tracking system (Greenhouse, Lever, Ashby, Workday,
-          SmartRecruiters, Rippling), hashes every role atomically, and only
-          posts what&apos;s genuinely new.
+          Job aggregators make freshness hard to reason about. One opening can
+          appear through several mirrors, lose its original posting context,
+          and remain visible after the source closes. <strong>Nori</strong>{" "}
+          starts from company career pages and ATS endpoints instead, then
+          normalizes each result before it reaches the user.
         </p>
 
-        <h2>Bounded workers over a large registry</h2>
+        <h2>A registry, not an inflated monitoring claim</h2>
         <p>
-          Different ATS feeds change at different speeds and have different
-          rate-limit profiles. Nori keeps a registry covering 31,000+
-          companies, then runs source-specific adapters in bounded scheduled
-          batches. The registry describes available coverage; it is not a
-          claim that every company is actively polled in every run. Separate
-          workers keep one ATS outage from taking down the rest of the flow:
+          Nori has a registry covering 31,000+ companies. That registry is the
+          address book for the ingestion system; it does not mean every record
+          is actively polled in every run. Validation jobs classify healthy,
+          stale, and failing targets so bounded workers can spend time on due
+          sources without overwhelming upstream systems.
         </p>
+        <p>
+          Source-specific adapters handle the differences between Greenhouse,
+          Lever, Ashby, Workday, SmartRecruiters, BambooHR, and direct company
+          APIs. Backoff, circuit breaking, and target quarantine isolate a bad
+          endpoint instead of allowing one provider to stall the full run.
+        </p>
+
+        <h2>The pipeline</h2>
         <ol>
           <li>
-            <strong>Worker 1: Fast Tier.</strong> RSS + GitHub feeds +
-            Greenhouse / Lever / Ashby, the cheapest, fastest-moving sources,
-            fetched first so the rest of the run already has a hot cache.
+            <strong>Ingest.</strong> Bounded asynchronous workers fetch only
+            eligible targets and place normalized records into the processing
+            path.
           </li>
           <li>
-            <strong>Worker 2: Medium Tier.</strong> Workday / Rippling /
-            SmartRecruiters. Heavier endpoints, deeper rate limits, polled
-            with backoff.
+            <strong>Normalize.</strong> ATS-specific payloads become one job
+            schema with canonical company, title, location, timestamp, and
+            direct-apply fields.
           </li>
           <li>
-            <strong>Worker 3: Bounded Registry Batches.</strong> Processes
-            eligible registry records in controlled batches to extend
-            coverage without overwhelming source systems.
+            <strong>Deduplicate.</strong> Stable hashes and database uniqueness
+            constraints reject repeated listings without a race-prone read
+            before write.
           </li>
           <li>
-            <strong>Worker 4: Discord Push.</strong> Atomic broadcast of
-            every newly-hashed listing from this hour. Nothing posted unless
-            it cleared the dedup gate.
+            <strong>Rank.</strong> Sentence-transformer similarity and product
+            filters prioritize relevant roles before delivery.
           </li>
           <li>
-            <strong>Worker 5: Registry Expander.</strong> Discovers new ATS
-            endpoints and feeds them back into the catalogue so it grows
-            without me babysitting it.
+            <strong>Serve.</strong> FastAPI exposes the data layer while the
+            Next.js product supports discovery, saving, and application
+            tracking.
           </li>
         </ol>
-        <p>
-          Each worker writes only its own slice of the SQLite table and
-          triggers the next worker in line. The chain itself is the
-          schedule.
-        </p>
       </Prose>
 
-      <Figure
-        src="/projects/jobclaw-hero.png"
-        alt="Nori GitHub Actions workflows page showing the scheduled workers"
-        aspect="2509/1157"
-        fit="contain"
-        caption="The five workers as GitHub Actions workflows. Each completes before the next starts, and the chain runs every hour on the hour."
-      />
+      <div className="container-page">
+        <MetricRow>
+          <Metric
+            value="31K+"
+            label="Company registry"
+            hint="ATS and career-page coverage"
+          />
+          <Metric
+            value="120+"
+            label="Matches per day"
+            hint="surfaced by the discovery pipeline"
+          />
+          <Metric
+            value="95%"
+            label="Duplicate filtering"
+            hint="before ranked delivery"
+          />
+        </MetricRow>
+      </div>
 
       <Prose>
-        <h2>Atomic dedup is the whole game</h2>
+        <h2>Why the architecture matters</h2>
         <p>
-          The interesting part isn&apos;t scraping. It&apos;s the dedup. Each
-          listing gets a stable hash computed from{" "}
-          <code>(company, title, location, source_url)</code>. Inserts go
-          through a SQLite WAL-mode table with a uniqueness constraint on the
-          hash. If the insert succeeds, the listing is genuinely new and gets
-          broadcast. If it conflicts, it&apos;s silently dropped. No race
-          windows, no &ldquo;was this posted yet?&rdquo; lookups before the
-          insert.
+          Crawling is the visible part, but reliability lives in scheduling,
+          normalization, and state. PostgreSQL provides the production source
+          of truth, Redis supports queued work, and a local SQLite mode keeps
+          development reproducible. The adapters remain independent, so a
+          provider change can be fixed without rewriting the rest of the
+          ingestion system.
         </p>
         <p>
-          The decoupling matters too: each micro-scraper writes only its
-          slice of the table and never reads another scraper&apos;s state.
-          That lets me kill a single ATS poller without bringing down the
-          rest of the fleet, and it makes the GitHub Actions concurrency
-          model match the data model exactly.
+          The result is intentionally less dramatic than a feed of raw scrape
+          logs: a small set of fresh roles with direct source links and enough
+          context to make a decision quickly. Quiet output is the product.
         </p>
-
-        <h2>Discord as the read path</h2>
-        <p>
-          Discord ended up being the right read path. It gives me free
-          per-role channel routing (frontend, ML, infra, research), threading
-          for follow-ups, rich embed cards with company + location + posted
-          time, and a chat surface where I can drop &ldquo;applied&rdquo; /
-          &ldquo;skipping&rdquo; reactions on each listing. A web dashboard
-          would have been more polish for less signal.
-        </p>
-      </Prose>
-
-      <Figure
-        src="/projects/jobclaw-discord.png"
-        alt="Discord channel showing Nori broadcasting software engineering roles with company, location, posted time, and source"
-        aspect="1945/1026"
-        fit="contain"
-        caption="The output side: Nori posting fresh roles. Each card carries source, company, location, and posted-time for fast triage."
-      />
-
-      <Prose>
-        <h2>What I&apos;d do next</h2>
-        <ul>
-          <li>
-            <strong>Score listings before broadcasting.</strong> Right now
-            every match for my role filter goes through. A small ranker on
-            top of the hash table would let me push only the top 20% to the
-            main channel and dump the rest to an archive.
-          </li>
-          <li>
-            <strong>Auto-extract apply links.</strong> Some ATSes hide the
-            direct apply URL behind a redirect that breaks copy-paste. A tiny
-            unwrap step would close the loop from Discord card to apply
-            screen.
-          </li>
-          <li>
-            <strong>Promote the Registry Expander.</strong> Right now it only
-            discovers Greenhouse/Lever endpoints because they have public
-            company lists. Adding Workday subdomain enumeration would
-            roughly double the catalogue.
-          </li>
-        </ul>
       </Prose>
     </article>
   );

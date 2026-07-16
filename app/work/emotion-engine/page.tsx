@@ -20,7 +20,7 @@ export default function EmotionEnginePage() {
         period="Feb 2026 – Apr 2026"
         role="Graduate Researcher at Rochester Institute of Technology"
         repo="https://github.com/premxai/emotion_engine"
-        demo="https://web-production-91496.up.railway.app/poster/"
+        demo="https://web-production-91496.up.railway.app/"
       />
 
       <Prose>

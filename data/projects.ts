@@ -51,6 +51,7 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/kerna",
     demo: "https://kerna.run/",
     featured: true,
+    featuredVideo: "/projects/kerna-home.mp4",
     hasCaseStudy: true,
     image: "/projects/kerna-work.webp",
     hero: "/projects/kerna-hero.png",

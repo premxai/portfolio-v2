@@ -14,6 +14,8 @@ export type Project = {
   repo?: string;
   demo?: string;
   featured?: boolean;
+  /** Optional motion preview used only by selected-work cards. */
+  featuredVideo?: string;
   hasCaseStudy?: boolean;
   /** Square thumbnail (recommend 320×320). If absent, a placeholder is rendered. */
   image?: string;
@@ -49,8 +51,9 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/kerna",
     demo: "https://kerna.run/",
     featured: true,
+    featuredVideo: "/projects/kerna-home.mp4",
     hasCaseStudy: true,
-    image: "/projects/kerna-icon.png",
+    image: "/projects/kerna-work.webp",
     hero: "/projects/kerna-hero.png",
     heroFit: "contain",
   },
@@ -69,7 +72,7 @@ export const projects: Project[] = [
     demo: "https://www.norinote.xyz/",
     featured: true,
     hasCaseStudy: true,
-    image: "/projects/jobclaw.png",
+    image: "/projects/nori-work.webp",
     hero: "/projects/jobclaw-hero.png",
     heroFit: "contain",
   },
@@ -87,8 +90,9 @@ export const projects: Project[] = [
     repo: "https://github.com/premxai/cryo",
     demo: "https://www.cryoweb.xyz/",
     featured: true,
+    featuredVideo: "/projects/cryo-home.mp4",
     hasCaseStudy: true,
-    image: "/projects/cryo-cube.jpg",
+    image: "/projects/cryo-work.webp",
     hero: "/projects/cryo-hero.jpg",
     heroFit: "contain",
   },
@@ -159,7 +163,7 @@ export const projects: Project[] = [
     demo: "https://trysushi.xyz/",
     featured: false,
     hasCaseStudy: true,
-    image: "/projects/sushi.png",
+    image: "/projects/sushi-work.webp",
     hero: "/projects/sushi.png",
     heroFit: "contain",
   },

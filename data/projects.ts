@@ -145,6 +145,7 @@ export const projects: Project[] = [
     outcome: "Completed 68% of previously failed benchmark tasks",
     repo: "https://github.com/premxai/PackAI",
     demo: "https://marketplace.visualstudio.com/items?itemName=premxai.packai",
+    featuredVideo: "/projects/packai-home.mp4",
     hasCaseStudy: true,
     image: "/projects/packai.png",
     hero: "/projects/packai-hero.png",

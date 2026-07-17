@@ -249,7 +249,8 @@ export const githubProjects: GithubProject[] = [
       "Natural-language video search using scene detection, CLIP embeddings, timestamped matches, and Qdrant vector retrieval.",
     stack: ["FastAPI", "PyTorch", "CLIP", "Qdrant", "OpenCV", "React"],
     repo: "https://github.com/premxai/video-search-platform",
-    image: "/projects/archive/video-search-platform.png",
+    image: "/projects/video-search-work.webp",
+    imageFit: "contain",
   },
   {
     title: "Document Intelligence System",
@@ -257,7 +258,8 @@ export const githubProjects: GithubProject[] = [
       "Multi-agent document processing for OCR, structured extraction, semantic search, and grounded question answering.",
     stack: ["Python", "LangGraph", "Qdrant", "Tesseract", "FastAPI"],
     repo: "https://github.com/premxai/document-intelligence-system",
-    image: "/projects/archive/document-intelligence-system.png",
+    image: "/projects/document-intelligence-work.webp",
+    imageFit: "contain",
   },
   {
     title: "Kubernetes MLOps Pipeline",
@@ -265,6 +267,7 @@ export const githubProjects: GithubProject[] = [
       "Reference pipeline for training, deployment, artifact tracking, monitoring, and infrastructure automation on Kubernetes.",
     stack: ["Python", "Kubernetes", "Terraform", "FastAPI", "MLflow", "Prometheus"],
     repo: "https://github.com/premxai/Production-MLOps-Pipeline-Kubernetes",
-    image: "/projects/archive/production-mlops-pipeline-kubernetes.png",
+    image: "/projects/kubernetes-mlops-work.webp",
+    imageFit: "contain",
   },
 ];

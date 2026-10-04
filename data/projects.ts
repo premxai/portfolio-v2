@@ -200,6 +200,7 @@ export const projects: Project[] = [
     hasCaseStudy: true,
     image: "/projects/agloe-work.webp",
     hero: "/projects/agloe-hero.png",
+    heroVideo: "/projects/agloe-hero.mp4",
     heroFit: "contain",
   },
 ];

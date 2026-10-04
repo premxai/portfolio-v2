@@ -133,7 +133,8 @@ export default function AgloePage() {
           <li>
             <strong>Report card.</strong> Drop in a swarm&apos;s log and it
             grades how traceable the swarm is, and separates real copying from
-            coincidence. It runs in your browser; nothing is uploaded.
+            coincidence. It runs in your browser; nothing is uploaded.{" "}
+            <a href="/agloe/card/index.html">Try it on your own swarm&apos;s log.</a>
           </li>
           <li>
             <strong>Canary gateway.</strong> The three-call kit that stamps
@@ -147,7 +148,8 @@ export default function AgloePage() {
           <li>
             <strong>Colony viewer.</strong> Plays any log as an ant colony; click
             an ant to trace it back to what it read and forward to everyone
-            downstream.
+            downstream.{" "}
+            <a href="/agloe/colony/index.html">Open the viewer.</a>
           </li>
         </ul>
 

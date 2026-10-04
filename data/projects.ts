@@ -185,6 +185,23 @@ export const projects: Project[] = [
     image: "/projects/papermind-work.webp",
     hero: "/projects/papermind-hero.png",
   },
+  {
+    slug: "agloe",
+    title: "Agloe",
+    tagline:
+      "Trap streets for AI agent swarms: trace a copied mistake back to the exact copy it came from.",
+    year: "2026",
+    period: "Oct 2026",
+    status: "research",
+    category: "Research",
+    stack: ["Python", "JavaScript", "Statistics", "LLM agents", "pytest"],
+    outcome: "70% vs 35% sources named | 25-50% to 100% traceable | 83% to 8% re-check",
+    repo: "https://github.com/premxai/agloe",
+    hasCaseStudy: true,
+    image: "/projects/agloe-work.webp",
+    hero: "/projects/agloe-hero.png",
+    heroFit: "contain",
+  },
 ];
 
 export const featuredProjects = projects.filter((p) => p.featured);
@@ -196,6 +213,7 @@ const flagshipSlugs = new Set([
   "emotion-engine",
   "packai",
   "sushi",
+  "agloe",
 ]);
 
 export const flagshipProjects = projects.filter((project) =>

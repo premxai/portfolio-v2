@@ -33,7 +33,7 @@ export default function WorkPage() {
         </h1>
         </div>
         <p className="text-lg text-[color:var(--color-fg-muted)] text-pretty">
-          Twelve products, research systems, and public repositories across
+          Thirteen products, research systems, and public repositories across
           agent infrastructure, search, data, and applied machine learning.
         </p>
       </header>

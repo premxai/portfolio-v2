@@ -109,7 +109,7 @@ export const projects: Project[] = [
     stack: ["PyTorch", "Python", "Django", "Custom sim engine"],
     outcome: "p = 3.3e-113 across 205,940 agent-step records",
     repo: "https://github.com/premxai/emotion_engine",
-    demo: "https://web-production-91496.up.railway.app/",
+    demo: "https://echotown.live/",
     featured: false,
     hasCaseStudy: true,
     image: "/projects/emotion-engine-work.webp",
